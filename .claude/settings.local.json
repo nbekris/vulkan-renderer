@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"E:\\\\MastersHW\\\\VulkanProj\\\\vulkan-renderer\" -Recurse -File | Where-Object {$_.Extension -in @\\('.txt', '.md', '.cmake', '.props', '.xml', '.json', '.yaml', '.yml', '.config'\\)} | Select-Object FullName, Extension | Sort-Object FullName)"
+    ]
+  }
+}
