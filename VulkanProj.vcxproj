@@ -74,7 +74,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -83,7 +83,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -95,7 +95,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -104,7 +104,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -114,7 +114,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -123,7 +123,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -135,7 +135,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -144,14 +144,20 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\main.cpp" Condition="'$(RendererSmokeTests)'!='true'" />
+    <ClCompile Include="Tests\RendererSmokeTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClCompile Include="Source\Vma.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\VmaConfig.h" />
+    <ClInclude Include="Source\ThirdParty\VMA\vk_mem_alloc.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Shaders\triangle.vert">
@@ -165,7 +171,49 @@
       <Outputs>$(ProjectDir)Shaders\frag.spv</Outputs>
     </CustomBuild>
   </ItemGroup>
+  <PropertyGroup Condition="'$(RendererSmokeTests)'=='true'">
+    <TargetName>RendererSmokeTests</TargetName>
+    <IntDir>$(ProjectDir)VulkanProj\$(Platform)\$(Configuration)\SmokeTests\</IntDir>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\AllocatedBuffer.cpp" />
+    <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\DeviceSelection.cpp" />
+    <ClCompile Include="Source\FrameRenderer.cpp" />
+    <ClCompile Include="Source\GraphicsPipeline.cpp" />
+    <ClCompile Include="Source\MemoryAllocator.cpp" />
+    <ClCompile Include="Source\RenderTargets.cpp" />
+    <ClCompile Include="Source\ShaderModule.cpp" />
+    <ClCompile Include="Source\SwapChain.cpp" />
+    <ClCompile Include="Source\TriangleMesh.cpp" />
+    <ClCompile Include="Source\TrianglePass.cpp" />
+    <ClCompile Include="Source\VulkanContext.cpp" />
+    <ClCompile Include="Source\Window.cpp" />
+    <ClInclude Include="Source\AllocatedBuffer.h" />
+    <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\DeviceSelection.h" />
+    <ClInclude Include="Source\FrameRenderer.h" />
+    <ClInclude Include="Source\GraphicsPipeline.h" />
+    <ClInclude Include="Source\IDrawCommands.h" />
+    <ClInclude Include="Source\MemoryAllocator.h" />
+    <ClInclude Include="Source\RenderTargets.h" />
+    <ClInclude Include="Source\ShaderModule.h" />
+    <ClInclude Include="Source\SwapChain.h" />
+    <ClInclude Include="Source\TriangleMesh.h" />
+    <ClInclude Include="Source\TrianglePass.h" />
+    <ClInclude Include="Source\VulkanCheck.h" />
+    <ClInclude Include="Source\VulkanContext.h" />
+    <ClInclude Include="Source\Window.h" />
+  </ItemGroup>
+  <Target Name="CopyGlfwRuntime" AfterTargets="Build">
+    <Copy SourceFiles="$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022\glfw3.dll"
+          DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <ItemGroup>
+    <ClCompile Include="Source\PresentationSession.cpp" />
+    <ClInclude Include="Source\PresentationSession.h" />
+  </ItemGroup>
 </Project>
