@@ -8,7 +8,7 @@
 #include "Assets/MeshPrimitives.h"
 #include "Rendering/Resources/SceneResources.h"
 #include "Rendering/Resources/Material.h"
-#include "Assets/GltfLoader.h"
+#include "Assets/ModelLoader.h"
 #include "Application/DemoScene.h"
 #include "Diagnostics/Benchmark.h"
 #include <iostream>
@@ -32,7 +32,7 @@ void Application::Run(int frameLimit, unsigned framesInFlight, const std::string
 		DemoScene::Populate(resources, scene);
 	}
 	if (!modelPath.empty()) {
-		const auto STATS = GltfLoader::Import(modelPath, resources, scene);
+		const auto STATS = ModelLoader::Import(modelPath, resources, scene);
 		std::cout << "Imported " << STATS.meshes << " meshes, " << STATS.materials << " materials, " << STATS.textures
 				  << " textures, " << STATS.objects << " objects\n";
 		if (autoFrame) {

@@ -14,6 +14,7 @@
 #include "Assets/MeshPrimitives.h"
 #include "Rendering/MeshTests.h"
 #include "Assets/GltfTests.h"
+#include "Assets/AssimpTests.h"
 #include "Rendering/LightingTextureTests.h"
 #include "Rendering/PbrTests.h"
 #include "Rendering/ShadowTests.h"
@@ -55,6 +56,7 @@ void RunModernRendererTests(const VulkanContext &context, const MemoryAllocator 
 	RunPbrTests(context, allocator, swapChain);
 	RunShadowTests(context, allocator, swapChain);
 	RunGltfTests(context, allocator, swapChain);
+	RunAssimpTests(context, allocator, swapChain);
 	FrameRing frames(context, allocator);
 	frames.Initialize(3);
 	SceneResources resources(context, allocator);

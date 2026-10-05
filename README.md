@@ -1,14 +1,16 @@
 # Vulkan 3D renderer
 
 A Vulkan 1.3 renderer with Slang shaders, static glTF import, physically based lighting,
-directional shadows, and GPU validation tests.
+directional shadows, Assimp model import, and GPU validation tests.
 
 ## Build
 
 Use Visual Studio/MSBuild with the C++ toolchain and Vulkan SDK installed. The SDK must
 provide `slangc` and `spirv-val`; GLFW, GLM, VMA, cgltf, and stb_image are bundled.
+Run `Tools/SetupAssimp.ps1` once to build Assimp (requires CMake and Visual Studio C++ tools).
 
 ```powershell
+powershell -ExecutionPolicy Bypass -File Tools/SetupAssimp.ps1
 msbuild VulkanProj.vcxproj /p:Configuration=Debug /p:Platform=x64
 .\x64\Debug\VulkanProj.exe
 ```
@@ -33,12 +35,15 @@ The default scene contains two textured cubes and a floor.
 ## Models and benchmarks
 
 ```powershell
+.\x64\Debug\VulkanProj.exe --model Assets/Models/SamplePyramid
 .\x64\Debug\VulkanProj.exe --model Assets/Samples/SampleScene.glb
 .\x64\Debug\VulkanProj.exe --frames 120 --frames-in-flight 3
 .\x64\Release\VulkanProj.exe --model Assets/Benchmarks/BenchmarkScene.gltf --benchmark 240 --auto-frame off --culling on
 ```
 
-Static glTF 2.0/GLB scenes are framed automatically; `--auto-frame off` keeps the default
+Use `--model` with a file or a folder containing one supported model. OBJ, FBX, and other
+Assimp formats share the existing asset upload path; glTF/GLB retains its original loader.
+Models are framed automatically; `--auto-frame off` keeps the default
 camera. `--culling on|off` toggles frustum culling. Benchmarks report draws, culled objects,
 triangles, CPU recording time, and GPU rendering time, excluding frame-pacing waits.
 
@@ -83,6 +88,7 @@ are opt-in; normal application runs do not enable them.
 `Tests` contains unit, rendering, integration, support, and asset fixtures. `Shaders` contains
 Slang sources; `Assets` contains sample and benchmark scenes. Visual Studio filters mirror these folders.
 
+- [Model import and asset folders](Docs/MODEL_IMPORT.md)
 - [Coding standard](Docs/CODING_STANDARD.md)
 - [Architecture and application flow](Docs/ARCHITECTURE.md)
 - [Project organization](Docs/PROJECT_ORGANIZATION.md)

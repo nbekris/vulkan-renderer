@@ -563,4 +563,28 @@
     <ClInclude Include="Tests\Rendering\ShadowTests.h"><Filter>Tests\Rendering</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup><None Include="Docs\SHADOWS.md"><Filter>Docs</Filter></None></ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Assets\ModelLoader.cpp"><Filter>Source\Assets</Filter></ClCompile>
+    <ClInclude Include="Source\Assets\ModelLoader.h"><Filter>Source\Assets</Filter></ClInclude>
+    <ClCompile Include="Source\Assets\AssimpLoader.cpp"><Filter>Source\Assets</Filter></ClCompile>
+    <ClInclude Include="Source\Assets\AssimpLoader.h"><Filter>Source\Assets</Filter></ClInclude>
+    <ClCompile Include="Source\Assets\AssimpMaterials.cpp"><Filter>Source\Assets</Filter></ClCompile>
+    <ClInclude Include="Source\Assets\AssimpMaterials.h"><Filter>Source\Assets</Filter></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Tools"><UniqueIdentifier>{F29A171E-763D-4EB1-AD85-17C58537A2FA}</UniqueIdentifier></Filter>
+    <Filter Include="Assets\Models"><UniqueIdentifier>{94C9EB03-B43F-4F26-AD5A-6B0C1F46638D}</UniqueIdentifier></Filter>
+    <Filter Include="Assets\Models\SamplePyramid"><UniqueIdentifier>{9B2F9B03-B43F-4F26-AD5A-6B0C1F46638D}</UniqueIdentifier></Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Assets\AssimpTests.cpp"><Filter>Tests\Assets</Filter></ClCompile>
+    <ClInclude Include="Tests\Assets\AssimpTests.h"><Filter>Tests\Assets</Filter></ClInclude>
+    <None Include="Tools\SetupAssimp.ps1"><Filter>Tools</Filter></None>
+    <None Include="Docs\MODEL_IMPORT.md"><Filter>Docs</Filter></None>
+    <None Include="Assets\Models\README.md"><Filter>Assets\Models</Filter></None>
+    <None Include="Assets\Models\SamplePyramid\Pyramid.obj"><Filter>Assets\Models\SamplePyramid</Filter></None>
+    <None Include="Assets\Models\SamplePyramid\Pyramid.mtl"><Filter>Assets\Models\SamplePyramid</Filter></None>
+    <None Include="Assets\Models\SamplePyramid\checker.png"><Filter>Assets\Models\SamplePyramid</Filter></None>
+  </ItemGroup>
+  <ItemGroup><None Include="Source\ThirdParty\Assimp\LICENSE"><Filter>Source\ThirdParty</Filter></None></ItemGroup>
 </Project>

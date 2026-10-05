@@ -76,6 +76,18 @@
     <!-- Slang 2026.8's NonUniformResourceIndex declares this capability set; emitted SPIR-V only uses required instructions. -->
     <SlangBindlessCapabilities>SPV_GOOGLE_user_type+spvDerivativeControl+spvImageQuery+spvImageGatherExtended+spvSparseResidency+spvMinLod+spvFragmentFullyCoveredEXT</SlangBindlessCapabilities>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssimpLibraries Condition="'$(Configuration)'=='Debug'">assimpd.lib;zlibstaticd.lib</AssimpLibraries>
+    <AssimpLibraries Condition="'$(Configuration)'!='Debug'">assimp.lib;zlibstatic.lib</AssimpLibraries>
+    <AssimpMainLibrary Condition="'$(Configuration)'=='Debug'">assimpd.lib</AssimpMainLibrary>
+    <AssimpMainLibrary Condition="'$(Configuration)'!='Debug'">assimp.lib</AssimpMainLibrary>
+    <LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
+  <Target Name="CheckAssimpDependency" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(Platform)'!='x64'" Text="The bundled renderer dependencies require x64." />
+    <Error Condition="!Exists('$(ProjectDir)Libraries\Assimp\install\include\assimp\Importer.hpp')" Text="Assimp is missing. Run powershell -ExecutionPolicy Bypass -File Tools/SetupAssimp.ps1 first." />
+    <Error Condition="!Exists('$(ProjectDir)Libraries\Assimp\install\lib\$(AssimpMainLibrary)')" Text="Assimp $(Configuration) library is missing. Run Tools/SetupAssimp.ps1." />
+  </Target>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -83,13 +95,13 @@
       <PreprocessorDefinitions>GLFW_DLL;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\Assimp\install\include;$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\Assimp\install\lib;$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(AssimpLibraries);vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -104,13 +116,13 @@
       <PreprocessorDefinitions>GLFW_DLL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\Assimp\install\include;$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\Assimp\install\lib;$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(AssimpLibraries);vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -123,13 +135,13 @@
       <PreprocessorDefinitions>GLFW_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\Assimp\install\include;$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\Assimp\install\lib;$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(AssimpLibraries);vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -144,13 +156,13 @@
       <PreprocessorDefinitions>GLFW_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\Assimp\install\include;$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Libraries\Assimp\install\lib;$(ProjectDir)Libraries\VulkanSDK\Lib;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(AssimpLibraries);vulkan-1.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -412,4 +424,14 @@ if errorlevel 1 exit /b 1
     <ClInclude Include="Tests\Rendering\ShadowTests.h" />
   </ItemGroup>
   <ItemGroup><None Include="Docs\SHADOWS.md" /></ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Assets\ModelLoader.cpp" />
+    <ClInclude Include="Source\Assets\ModelLoader.h" />
+    <ClCompile Include="Source\Assets\AssimpLoader.cpp" />
+    <ClInclude Include="Source\Assets\AssimpLoader.h" />
+    <ClCompile Include="Source\Assets\AssimpMaterials.cpp" />
+    <ClInclude Include="Source\Assets\AssimpMaterials.h" />
+  </ItemGroup>
+  <ItemGroup><ClCompile Include="Tests\Assets\AssimpTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" /><ClInclude Include="Tests\Assets\AssimpTests.h" /><None Include="Tools\SetupAssimp.ps1" /><None Include="Docs\MODEL_IMPORT.md" /><None Include="Assets\Models\README.md" /><None Include="Assets\Models\SamplePyramid\Pyramid.obj" /><None Include="Assets\Models\SamplePyramid\Pyramid.mtl" /><None Include="Assets\Models\SamplePyramid\checker.png" /></ItemGroup>
+  <ItemGroup><None Include="Source\ThirdParty\Assimp\LICENSE" /></ItemGroup>
 </Project>

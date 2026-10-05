@@ -427,3 +427,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Assimp source archive, extraction, and generated static libraries
+/Libraries/Assimp/
+
+# Wavefront model assets are source data, not compiler object files
+!/Assets/Models/**/*.obj

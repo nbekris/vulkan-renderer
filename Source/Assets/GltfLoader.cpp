@@ -1,4 +1,5 @@
 #include "Assets/GltfLoader.h"
+#include "Assets/ModelLoader.h"
 #include "Assets/GltfDocument.h"
 #include "Assets/GltfGeometry.h"
 #include "Assets/GltfImages.h"
@@ -113,38 +114,7 @@ ModelData GltfLoader::Read(const std::filesystem::path &path) {
 }
 
 ImportStats GltfLoader::Import(const std::filesystem::path &path, SceneResources &resources, Scene &scene) {
-	const auto CHECKPOINT = resources.GetCheckpoint();
-	const size_t OBJECT_COUNT = scene.GetObjects().size();
-	const auto MODEL = Read(path);
-	if (MODEL.materials.size() > MATERIAL_CAPACITY - resources.GetMaterialCount()
-		|| MODEL.textures.size() > TEXTURE_CAPACITY - resources.GetTextureCount()) {
-		throw std::runtime_error("glTF asset exceeds available material or texture table capacity");
-	}
-	try {
-		std::vector<uint32_t> textures, materials;
-		std::vector<std::shared_ptr<const Mesh>> meshes;
-		for (const auto &texture : MODEL.textures) {
-			textures.push_back(resources.AddTexture(texture.image.extent, texture.image.pixels, TextureColorSpace::Srgb,
-													texture.sampling));
-		}
-		for (auto material : MODEL.materials) {
-			material.textureIndex = material.textureIndex == NO_MODEL_RESOURCE ? 0 : textures.at(material.textureIndex);
-			materials.push_back(resources.AddMaterial(material));
-		}
-		for (const auto &mesh : MODEL.meshes) {
-			meshes.push_back(resources.CreateMesh(mesh));
-		}
-		for (const auto &instance : MODEL.instances) {
-			scene.AddObject(meshes.at(instance.mesh),
-							instance.material == NO_MODEL_RESOURCE ? 0 : materials.at(instance.material),
-							instance.transform);
-		}
-	} catch (...) {
-		scene.TruncateObjects(OBJECT_COUNT);
-		resources.Rollback(CHECKPOINT);
-		throw;
-	}
-	return {MODEL.meshes.size(), MODEL.materials.size(), MODEL.textures.size(), MODEL.instances.size()};
+	return ModelLoader::Upload(Read(path), resources, scene);
 }
 
 void GltfLoader::FrameScene(Scene &scene, float aspectRatio) {

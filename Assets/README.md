@@ -9,3 +9,5 @@ binary and PNG in a grid of 2,048 nodes; --auto-frame off makes most nodes outsi
 Tests/Assets contains data-URI variants, sparse attributes, interleaved geometry with texture
 transforms/unlit/alpha-mask materials, and intentionally invalid fixtures for rejection/rollback tests.
 These are regression fixtures, not examples of full physically based rendering.
+
+Project-local OBJ/FBX and other models belong under Models/<Name>. See [model folders](Models/README.md).
