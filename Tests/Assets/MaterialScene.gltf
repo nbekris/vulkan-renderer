@@ -1,0 +1,185 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "vulkan-renderer authored fixture"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        2
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "children": [
+        1
+      ]
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0,
+        -1,
+        0
+      ]
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        5,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0.24740395925452294,
+        0,
+        0.9689124217106447
+      ],
+      "scale": [
+        0.7,
+        1.2,
+        0.8
+      ]
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 840,
+      "uri": "data:application/octet-stream;base64,AAAAvwAAAL8AAAA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAAA/AAAAvwAAAD8AAAAAAAAAAAAAgD8AAIA/AAAAAAAAAD8AAAA/AAAAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAvwAAAD8AAAA/AAAAAAAAAAAAAIA/AAAAAAAAgD8AAAA/AAAAvwAAAL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAAL8AAAC/AAAAvwAAAAAAAAAAAACAvwAAgD8AAAAAAAAAvwAAAD8AAAC/AAAAAAAAAAAAAIC/AACAPwAAgD8AAAA/AAAAPwAAAL8AAAAAAAAAAAAAgL8AAAAAAACAPwAAAD8AAAC/AAAAPwAAgD8AAAAAAAAAAAAAAAAAAAAAAAAAPwAAAL8AAAC/AACAPwAAAAAAAAAAAACAPwAAAAAAAAA/AAAAPwAAAL8AAIA/AAAAAAAAAAAAAIA/AACAPwAAAD8AAAA/AAAAPwAAgD8AAAAAAAAAAAAAAAAAAIA/AAAAvwAAAL8AAAC/AACAvwAAAAAAAAAAAAAAAAAAAAAAAAC/AAAAvwAAAD8AAIC/AAAAAAAAAAAAAIA/AAAAAAAAAL8AAAA/AAAAPwAAgL8AAAAAAAAAAAAAgD8AAIA/AAAAvwAAAD8AAAC/AACAvwAAAAAAAAAAAAAAAAAAgD8AAAC/AAAAPwAAAD8AAAAAAACAPwAAAAAAAAAAAAAAAAAAAD8AAAA/AAAAPwAAAAAAAIA/AAAAAAAAgD8AAAAAAAAAPwAAAD8AAAC/AAAAAAAAgD8AAAAAAACAPwAAgD8AAAC/AAAAPwAAAL8AAAAAAACAPwAAAAAAAAAAAACAPwAAAL8AAAC/AAAAvwAAAAAAAIC/AAAAAAAAAAAAAAAAAAAAPwAAAL8AAAC/AAAAAAAAgL8AAAAAAACAPwAAAAAAAAA/AAAAvwAAAD8AAAAAAACAvwAAAAAAAIA/AACAPwAAAL8AAAC/AAAAPwAAAAAAAIC/AAAAAAAAAAAAAIA/AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcA"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 768,
+      "byteStride": 32
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 768,
+      "byteLength": 72
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 24,
+      "type": "VEC3",
+      "min": [
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "max": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "byteOffset": 0
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 24,
+      "type": "VEC3",
+      "byteOffset": 12
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 24,
+      "type": "VEC2",
+      "byteOffset": 24
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5123,
+      "count": 36,
+      "type": "SCALAR"
+    }
+  ],
+  "images": [
+    {
+      "uri": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGUlEQVR4nGNIeabxXwOIYTQDMgdEMxBUAQDleCUxLNWj7gAAAABJRU5ErkJggg=="
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9728,
+      "minFilter": 9984,
+      "wrapS": 33071,
+      "wrapT": 33648
+    }
+  ],
+  "textures": [
+    {
+      "source": 0,
+      "sampler": 0
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 0,
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0.25,
+                0.5
+              ],
+              "scale": [
+                2,
+                3
+              ]
+            }
+          }
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      },
+      "doubleSided": true,
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.75,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      }
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_texture_transform",
+    "KHR_materials_unlit"
+  ]
+}

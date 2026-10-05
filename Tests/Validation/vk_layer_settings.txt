@@ -1,0 +1,4 @@
+# Opt-in validation settings for the Vulkan SDK layer.
+khronos_validation.validate_sync = true
+khronos_validation.syncval_submit_time_validation = true
+khronos_validation.gpuav_enable = false

@@ -1,134 +1,542 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{CCCAFC81-E95E-5B1F-A007-7D8445A40BEB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Assets\Benchmarks">
+      <UniqueIdentifier>{7785072A-9501-56FE-B723-80C76BF2A5B1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Assets\Samples">
+      <UniqueIdentifier>{471CF54D-6CE8-510F-B498-D2CAC78C5BA6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{7159AA52-5E5D-55D5-8173-59CC11212F72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Documentation">
+      <UniqueIdentifier>{07E928CA-BBE7-5A6C-A37E-934513104EF2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
-      <UniqueIdentifier>{62B25F5B-7EC7-4B44-B813-D9D935E4F25B}</UniqueIdentifier>
-      <Extensions>vert;frag;spv</Extensions>
+      <UniqueIdentifier>{0B0CDC6F-934F-5402-BDB7-4D5115390001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{DE0D4E81-A1E9-551F-AC3F-75B698A6A08B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Application">
+      <UniqueIdentifier>{DE9CE7EF-400D-59CE-8AD5-B24791EB8670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Assets">
+      <UniqueIdentifier>{9F3518B8-2A93-583B-8EE0-1C0A8163F8F3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Diagnostics">
+      <UniqueIdentifier>{4BA8F708-CCD7-5D4D-B6E3-43ADB5D21B8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Math">
+      <UniqueIdentifier>{0D0BEF36-5AEA-5110-A74D-9055BDFD369D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Platform">
+      <UniqueIdentifier>{578464CF-81FC-5C24-AA66-639C415C7C62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering">
+      <UniqueIdentifier>{27E67E46-BAEC-558A-AF42-3E0CB6AABD50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Core">
+      <UniqueIdentifier>{925A7A1D-4911-5CF9-93A9-46E21B82555E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Descriptors">
+      <UniqueIdentifier>{99455C79-4486-5D5E-8B04-4E29DC596B9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Frames">
+      <UniqueIdentifier>{9F9D2E6E-4B45-555B-88D9-349AF9A888F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Memory">
+      <UniqueIdentifier>{0B97E577-A0B8-55AB-95E2-B0327E3F2043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Pipeline">
+      <UniqueIdentifier>{5D903A9D-EF69-53B8-92C2-AD7D8C106465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Presentation">
+      <UniqueIdentifier>{32CA6E91-57BE-5FED-ADFF-371E96E2AFB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Rendering\Resources">
+      <UniqueIdentifier>{2B90010A-B089-5D1B-AA5F-EDF1308A10DE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Scene">
+      <UniqueIdentifier>{E6388705-877F-5CD2-B8BF-869B460A9194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ThirdParty">
+      <UniqueIdentifier>{6790DF2E-D17D-5D9C-B8C5-9DBB945C6BFE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ThirdParty\VMA">
+      <UniqueIdentifier>{21BE6A42-E50B-5BF4-B12F-8736C84453E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ThirdParty\cgltf">
+      <UniqueIdentifier>{807EC51D-1504-57C6-929D-C292C7DCB525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ThirdParty\stb">
+      <UniqueIdentifier>{60F40314-760C-5F58-A421-A93CF357EB96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{DB967E12-966F-5727-B82D-D0FA8186D16B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Assets">
+      <UniqueIdentifier>{9636CBDA-52B7-5627-976D-F8D755995B85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Integration">
+      <UniqueIdentifier>{02511448-E895-5EF1-84C7-81B62196457D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Rendering">
+      <UniqueIdentifier>{3EAB7306-3B96-5B6A-A04B-F4908BD871C4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Support">
+      <UniqueIdentifier>{FA42910A-B704-51BE-BA7F-022406CACFA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Unit">
+      <UniqueIdentifier>{21FC98D0-257D-5260-9A74-71B2593D348C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Vma.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\VmaConfig.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="Source\ThirdParty\VMA\vk_mem_alloc.h"><Filter>Header Files</Filter></ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="Shaders\triangle.vert">
+    <None Include="Assets\README.md">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="Assets\Benchmarks\BenchmarkScene.gltf">
+      <Filter>Assets\Benchmarks</Filter>
+    </None>
+    <None Include="Assets\Samples\SampleScene.bin">
+      <Filter>Assets\Samples</Filter>
+    </None>
+    <None Include="Assets\Samples\SampleScene.glb">
+      <Filter>Assets\Samples</Filter>
+    </None>
+    <None Include="Assets\Samples\SampleScene.gltf">
+      <Filter>Assets\Samples</Filter>
+    </None>
+    <None Include="Assets\Samples\checker.png">
+      <Filter>Assets\Samples</Filter>
+    </None>
+    <None Include="Docs\IMPLEMENTATION_6.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="Docs\PROJECT_ORGANIZATION.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="CODING_STANDARD.md">
+      <Filter>Documentation</Filter>
+    </None>
+    <None Include="README.md">
+      <Filter>Documentation</Filter>
+    </None>
+    <None Include="Shaders\frag.spv">
+      <Filter>Shaders</Filter>
+    </None>
+    <CustomBuild Include="Shaders\mesh-attributes.frag.slang">
       <Filter>Shaders</Filter>
     </CustomBuild>
-    <CustomBuild Include="Shaders\triangle.frag">
+    <None Include="Shaders\mesh-attributes.spv">
+      <Filter>Shaders</Filter>
+    </None>
+    <CustomBuild Include="Shaders\mesh.frag.slang">
       <Filter>Shaders</Filter>
     </CustomBuild>
+    <CustomBuild Include="Shaders\mesh.vert.slang">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+    <None Include="Shaders\vert.spv">
+      <Filter>Shaders</Filter>
+    </None>
+    <ClCompile Include="Source\Application\Application.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Application\Application.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Application\DemoScene.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Application\DemoScene.h">
+      <Filter>Source\Application</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Application\main.cpp">
+      <Filter>Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\GltfDocument.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\GltfDocument.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Assets\GltfGeometry.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\GltfGeometry.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Assets\GltfImages.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\GltfImages.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Assets\GltfLoader.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\GltfLoader.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Assets\ImageDecoder.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\ImageDecoder.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\MeshData.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Assets\MeshPrimitives.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\MeshPrimitives.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\ModelData.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Assets\TexturePixels.cpp">
+      <Filter>Source\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Assets\TexturePixels.h">
+      <Filter>Source\Assets</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Diagnostics\Benchmark.cpp">
+      <Filter>Source\Diagnostics</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Diagnostics\Benchmark.h">
+      <Filter>Source\Diagnostics</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Diagnostics\GpuTiming.cpp">
+      <Filter>Source\Diagnostics</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Diagnostics\GpuTiming.h">
+      <Filter>Source\Diagnostics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Bounds.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Math\Frustum.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Math\Frustum.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Math.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Math\Transform.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Math\Transform.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Platform\Window.cpp">
+      <Filter>Source\Platform</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Platform\Window.h">
+      <Filter>Source\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\IDrawCommands.h">
+      <Filter>Source\Rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\MeshRenderer.cpp">
+      <Filter>Source\Rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\MeshRenderer.h">
+      <Filter>Source\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\RenderData.h">
+      <Filter>Source\Rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Core\DeviceRequirements.cpp">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Core\DeviceRequirements.h">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Core\DeviceSelection.cpp">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Core\DeviceSelection.h">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Core\VulkanCheck.h">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Core\VulkanContext.cpp">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Core\VulkanContext.h">
+      <Filter>Source\Rendering\Core</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Descriptors\GlobalDescriptors.cpp">
+      <Filter>Source\Rendering\Descriptors</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Descriptors\GlobalDescriptors.h">
+      <Filter>Source\Rendering\Descriptors</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Frames\DepthTarget.cpp">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Frames\DepthTarget.h">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Frames\FrameRenderer.cpp">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Frames\FrameRenderer.h">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Frames\FrameResources.cpp">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Frames\FrameResources.h">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Frames\FrameRing.cpp">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Frames\FrameRing.h">
+      <Filter>Source\Rendering\Frames</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Memory\AllocatedBuffer.cpp">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Memory\AllocatedBuffer.h">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Memory\AllocatedImage.cpp">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Memory\AllocatedImage.h">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Memory\MemoryAllocator.cpp">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Memory\MemoryAllocator.h">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Memory\ResourceUploader.cpp">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Memory\ResourceUploader.h">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Memory\VmaConfig.h">
+      <Filter>Source\Rendering\Memory</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Pipeline\GraphicsPipeline.cpp">
+      <Filter>Source\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Pipeline\GraphicsPipeline.h">
+      <Filter>Source\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Pipeline\ShaderModule.cpp">
+      <Filter>Source\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Pipeline\ShaderModule.h">
+      <Filter>Source\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Presentation\PresentationSession.cpp">
+      <Filter>Source\Rendering\Presentation</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Presentation\PresentationSession.h">
+      <Filter>Source\Rendering\Presentation</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Presentation\SwapChain.cpp">
+      <Filter>Source\Rendering\Presentation</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Presentation\SwapChain.h">
+      <Filter>Source\Rendering\Presentation</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\Material.cpp">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\Material.h">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\Mesh.cpp">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\Mesh.h">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\SceneResources.cpp">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\SceneResources.h">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\Texture.cpp">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\Texture.h">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Resources\TextureSampling.h">
+      <Filter>Source\Rendering\Resources</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Scene\Camera.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Scene\Camera.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Scene\CameraController.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Scene\CameraController.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Scene\Lighting.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Scene\Lighting.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Scene\Scene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Scene\Scene.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\Scene\SceneObject.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\Scene\SceneObject.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClCompile Include="Source\ThirdParty\Cgltf.cpp">
+      <Filter>Source\ThirdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ThirdParty\StbImage.cpp">
+      <Filter>Source\ThirdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ThirdParty\Vma.cpp">
+      <Filter>Source\ThirdParty</Filter>
+    </ClCompile>
+    <ClInclude Include="Source\ThirdParty\VMA\vk_mem_alloc.h">
+      <Filter>Source\ThirdParty\VMA</Filter>
+    </ClInclude>
+    <None Include="Source\ThirdParty\cgltf\LICENSE">
+      <Filter>Source\ThirdParty\cgltf</Filter>
+    </None>
+    <None Include="Source\ThirdParty\cgltf\README.md">
+      <Filter>Source\ThirdParty\cgltf</Filter>
+    </None>
+    <ClInclude Include="Source\ThirdParty\cgltf\cgltf.h">
+      <Filter>Source\ThirdParty\cgltf</Filter>
+    </ClInclude>
+    <None Include="Source\ThirdParty\stb\LICENSE">
+      <Filter>Source\ThirdParty\stb</Filter>
+    </None>
+    <None Include="Source\ThirdParty\stb\README.md">
+      <Filter>Source\ThirdParty\stb</Filter>
+    </None>
+    <ClInclude Include="Source\ThirdParty\stb\stb_image.h">
+      <Filter>Source\ThirdParty\stb</Filter>
+    </ClInclude>
+    <None Include="Tests\Assets\EmbeddedScene.gltf">
+      <Filter>Tests\Assets</Filter>
+    </None>
+    <ClCompile Include="Tests\Assets\GltfTests.cpp">
+      <Filter>Tests\Assets</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Assets\GltfTests.h">
+      <Filter>Tests\Assets</Filter>
+    </ClInclude>
+    <None Include="Tests\Assets\InvalidMaterial.gltf">
+      <Filter>Tests\Assets</Filter>
+    </None>
+    <None Include="Tests\Assets\MaterialScene.gltf">
+      <Filter>Tests\Assets</Filter>
+    </None>
+    <None Include="Tests\Assets\SparseScene.gltf">
+      <Filter>Tests\Assets</Filter>
+    </None>
+    <None Include="Tests\Assets\UnsupportedScene.gltf">
+      <Filter>Tests\Assets</Filter>
+    </None>
+    <ClCompile Include="Tests\Integration\RendererSmokeTests.cpp">
+      <Filter>Tests\Integration</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Rendering\DepthBufferTests.cpp">
+      <Filter>Tests\Rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Rendering\DepthBufferTests.h">
+      <Filter>Tests\Rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="Tests\Rendering\LightingTextureTests.cpp">
+      <Filter>Tests\Rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Rendering\LightingTextureTests.h">
+      <Filter>Tests\Rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="Tests\Rendering\MeshTests.cpp">
+      <Filter>Tests\Rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Rendering\MeshTests.h">
+      <Filter>Tests\Rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="Tests\Rendering\ModernRendererTests.cpp">
+      <Filter>Tests\Rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Rendering\ModernRendererTests.h">
+      <Filter>Tests\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\Support\RenderProbe.h">
+      <Filter>Tests\Support</Filter>
+    </ClInclude>
+    <ClCompile Include="Tests\Unit\CameraTransformTests.cpp">
+      <Filter>Tests\Unit</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Unit\CameraTransformTests.h">
+      <Filter>Tests\Unit</Filter>
+    </ClInclude>
+    <ClCompile Include="Tests\Unit\FrustumTests.cpp">
+      <Filter>Tests\Unit</Filter>
+    </ClCompile>
+    <ClInclude Include="Tests\Unit\FrustumTests.h">
+      <Filter>Tests\Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\AllocatedBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\DeviceSelection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FrameRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GraphicsPipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MemoryAllocator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\RenderTargets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ShaderModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SwapChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TriangleMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TrianglePass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VulkanContext.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClInclude Include="Source\AllocatedBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DeviceSelection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FrameRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GraphicsPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IDrawCommands.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MemoryAllocator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\RenderTargets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ShaderModule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SwapChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TriangleMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TrianglePass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VulkanCheck.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VulkanContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <Filter Include="Tests\Validation">
+      <UniqueIdentifier>{0E022A4A-C2A4-5245-93B9-DA0DF411F295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\GpuValidation">
+      <UniqueIdentifier>{EDB9CC1D-5221-50EF-9280-0FD97BD71E54}</UniqueIdentifier>
+    </Filter>
+    <None Include="Source\ThirdParty\VMA\LICENSE.txt">
+      <Filter>Source\ThirdParty\VMA</Filter>
+    </None>
+    <None Include="Tests\Validation\vk_layer_settings.txt">
+      <Filter>Tests\Validation</Filter>
+    </None>
+    <None Include="Tests\GpuValidation\vk_layer_settings.txt">
+      <Filter>Tests\GpuValidation</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tests\RendererSmokeTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <None Include="Docs\ARCHITECTURE.md">
+      <Filter>Docs</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\PresentationSession.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClInclude Include="Source\PresentationSession.h"><Filter>Header Files</Filter></ClInclude>
+    <None Include="Shaders\mesh-common.slang"><Filter>Shaders</Filter></None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\SLANG_MIGRATION.md"><Filter>Docs</Filter></None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig"><Filter>Documentation</Filter></None>
   </ItemGroup>
 </Project>

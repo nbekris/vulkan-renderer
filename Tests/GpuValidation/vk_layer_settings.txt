@@ -1,0 +1,7 @@
+# Run shader instrumentation separately from core/synchronization checks.
+khronos_validation.validate_core = false
+khronos_validation.validate_sync = false
+khronos_validation.gpuav_enable = true
+khronos_validation.gpuav_validate_ray_query = false
+khronos_validation.gpuav_validate_trace_ray = false
+khronos_validation.gpuav_mesh_shading = false

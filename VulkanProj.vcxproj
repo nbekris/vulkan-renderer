@@ -69,7 +69,13 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <SlangCompiler Condition="'$(SlangCompiler)'==''">$(VULKAN_SDK)\Bin\slangc.exe</SlangCompiler>
+    <SpirvValidator Condition="'$(SpirvValidator)'==''">$(VULKAN_SDK)\Bin\spirv-val.exe</SpirvValidator>
+    <SlangFlags>-target spirv -profile spirv_1_6 -matrix-layout-column-major -warnings-as-errors all</SlangFlags>
+    <!-- Slang 2026.8's NonUniformResourceIndex declares this capability set; emitted SPIR-V only uses required instructions. -->
+    <SlangBindlessCapabilities>SPV_GOOGLE_user_type+spvDerivativeControl+spvImageQuery+spvImageGatherExtended+spvSparseResidency+spvMinLod+spvFragmentFullyCoveredEXT</SlangBindlessCapabilities>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -77,7 +83,7 @@
       <PreprocessorDefinitions>GLFW_DLL;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -98,7 +104,7 @@
       <PreprocessorDefinitions>GLFW_DLL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +123,7 @@
       <PreprocessorDefinitions>GLFW_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +144,7 @@
       <PreprocessorDefinitions>GLFW_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Tests;$(ProjectDir)Libraries\glm;$(ProjectDir)Libraries\VulkanSDK\Include;$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,24 +157,30 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp" Condition="'$(RendererSmokeTests)'!='true'" />
-    <ClCompile Include="Tests\RendererSmokeTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
-    <ClCompile Include="Source\Vma.cpp" />
+    <ClCompile Include="Source\Application\main.cpp" Condition="'$(RendererSmokeTests)'!='true'" />
+    <ClCompile Include="Tests\Integration\RendererSmokeTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClCompile Include="Source\ThirdParty\Vma.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\VmaConfig.h" />
+    <ClInclude Include="Source\Rendering\Memory\VmaConfig.h" />
     <ClInclude Include="Source\ThirdParty\VMA\vk_mem_alloc.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="Shaders\triangle.vert">
+    <CustomBuild Include="Shaders\mesh.vert.slang">
       <FileType>Document</FileType>
-      <Command>"$(VULKAN_SDK)\Bin\glslc.exe" "%(FullPath)" -o "$(ProjectDir)Shaders\vert.spv"</Command>
+      <Command>"$(SlangCompiler)" "%(FullPath)" $(SlangFlags) -entry Main -stage vertex -o "$(ProjectDir)Shaders\vert.spv"
+if errorlevel 1 exit /b 1
+"$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\vert.spv"</Command>
       <Outputs>$(ProjectDir)Shaders\vert.spv</Outputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
-    <CustomBuild Include="Shaders\triangle.frag">
+    <CustomBuild Include="Shaders\mesh.frag.slang">
       <FileType>Document</FileType>
-      <Command>"$(VULKAN_SDK)\Bin\glslc.exe" "%(FullPath)" -o "$(ProjectDir)Shaders\frag.spv"</Command>
+      <Command>"$(SlangCompiler)" "%(FullPath)" $(SlangFlags) -capability $(SlangBindlessCapabilities) -entry Main -stage fragment -o "$(ProjectDir)Shaders\frag.spv"
+if errorlevel 1 exit /b 1
+"$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\frag.spv"</Command>
       <Outputs>$(ProjectDir)Shaders\frag.spv</Outputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Condition="'$(RendererSmokeTests)'=='true'">
@@ -179,41 +191,187 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ItemGroup>
-    <ClCompile Include="Source\AllocatedBuffer.cpp" />
-    <ClCompile Include="Source\Application.cpp" />
-    <ClCompile Include="Source\DeviceSelection.cpp" />
-    <ClCompile Include="Source\FrameRenderer.cpp" />
-    <ClCompile Include="Source\GraphicsPipeline.cpp" />
-    <ClCompile Include="Source\MemoryAllocator.cpp" />
-    <ClCompile Include="Source\RenderTargets.cpp" />
-    <ClCompile Include="Source\ShaderModule.cpp" />
-    <ClCompile Include="Source\SwapChain.cpp" />
-    <ClCompile Include="Source\TriangleMesh.cpp" />
-    <ClCompile Include="Source\TrianglePass.cpp" />
-    <ClCompile Include="Source\VulkanContext.cpp" />
-    <ClCompile Include="Source\Window.cpp" />
-    <ClInclude Include="Source\AllocatedBuffer.h" />
-    <ClInclude Include="Source\Application.h" />
-    <ClInclude Include="Source\DeviceSelection.h" />
-    <ClInclude Include="Source\FrameRenderer.h" />
-    <ClInclude Include="Source\GraphicsPipeline.h" />
-    <ClInclude Include="Source\IDrawCommands.h" />
-    <ClInclude Include="Source\MemoryAllocator.h" />
-    <ClInclude Include="Source\RenderTargets.h" />
-    <ClInclude Include="Source\ShaderModule.h" />
-    <ClInclude Include="Source\SwapChain.h" />
-    <ClInclude Include="Source\TriangleMesh.h" />
-    <ClInclude Include="Source\TrianglePass.h" />
-    <ClInclude Include="Source\VulkanCheck.h" />
-    <ClInclude Include="Source\VulkanContext.h" />
-    <ClInclude Include="Source\Window.h" />
+    <ClCompile Include="Source\Rendering\Memory\AllocatedBuffer.cpp" />
+    <ClCompile Include="Source\Application\Application.cpp" />
+    <ClCompile Include="Source\Rendering\Core\DeviceSelection.cpp" />
+    <ClCompile Include="Source\Rendering\Frames\FrameRenderer.cpp" />
+    <ClCompile Include="Source\Rendering\Pipeline\GraphicsPipeline.cpp" />
+    <ClCompile Include="Source\Rendering\Memory\MemoryAllocator.cpp" />
+    <ClCompile Include="Source\Rendering\Pipeline\ShaderModule.cpp" />
+    <ClCompile Include="Source\Rendering\Presentation\SwapChain.cpp" />
+    <ClCompile Include="Source\Rendering\Core\VulkanContext.cpp" />
+    <ClCompile Include="Source\Platform\Window.cpp" />
+    <ClInclude Include="Source\Rendering\Memory\AllocatedBuffer.h" />
+    <ClInclude Include="Source\Application\Application.h" />
+    <ClInclude Include="Source\Rendering\Core\DeviceSelection.h" />
+    <ClInclude Include="Source\Rendering\Frames\FrameRenderer.h" />
+    <ClInclude Include="Source\Rendering\Pipeline\GraphicsPipeline.h" />
+    <ClInclude Include="Source\Rendering\IDrawCommands.h" />
+    <ClInclude Include="Source\Rendering\Memory\MemoryAllocator.h" />
+    <ClInclude Include="Source\Rendering\Pipeline\ShaderModule.h" />
+    <ClInclude Include="Source\Rendering\Presentation\SwapChain.h" />
+    <ClInclude Include="Source\Rendering\Core\VulkanCheck.h" />
+    <ClInclude Include="Source\Rendering\Core\VulkanContext.h" />
+    <ClInclude Include="Source\Platform\Window.h" />
   </ItemGroup>
   <Target Name="CopyGlfwRuntime" AfterTargets="Build">
     <Copy SourceFiles="$(ProjectDir)Libraries\glfw-3.4.bin.WIN64\lib-vc2022\glfw3.dll"
           DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
   <ItemGroup>
-    <ClCompile Include="Source\PresentationSession.cpp" />
-    <ClInclude Include="Source\PresentationSession.h" />
+    <ClCompile Include="Source\Rendering\Presentation\PresentationSession.cpp" />
+    <ClInclude Include="Source\Rendering\Presentation\PresentationSession.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Rendering\Memory\ResourceUploader.cpp" />
+    <ClCompile Include="Source\Rendering\Core\DeviceRequirements.cpp" />
+    <ClCompile Include="Source\Rendering\Frames\FrameResources.cpp" />
+    <ClCompile Include="Source\Rendering\Frames\FrameRing.cpp" />
+    <ClCompile Include="Source\Rendering\Descriptors\GlobalDescriptors.cpp" />
+    <ClInclude Include="Source\Rendering\Memory\ResourceUploader.h" />
+    <ClInclude Include="Source\Rendering\Core\DeviceRequirements.h" />
+    <ClInclude Include="Source\Rendering\Frames\FrameResources.h" />
+    <ClInclude Include="Source\Rendering\Frames\FrameRing.h" />
+    <ClInclude Include="Source\Rendering\Descriptors\GlobalDescriptors.h" />
+    <ClInclude Include="Source\Rendering\RenderData.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\ModernRendererTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClInclude Include="Tests\Rendering\ModernRendererTests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Math\Transform.cpp"></ClCompile>
+    <ClInclude Include="Source\Math\Transform.h"></ClInclude>
+    <ClCompile Include="Source\Scene\Camera.cpp"></ClCompile>
+    <ClInclude Include="Source\Scene\Camera.h"></ClInclude>
+    <ClCompile Include="Source\Scene\CameraController.cpp"></ClCompile>
+    <ClInclude Include="Source\Scene\CameraController.h"></ClInclude>
+    <ClCompile Include="Source\Scene\Scene.cpp"></ClCompile>
+    <ClInclude Include="Source\Scene\Scene.h"></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Unit\CameraTransformTests.cpp" Condition="'$(RendererSmokeTests)'=='true'"></ClCompile>
+    <ClInclude Include="Tests\Unit\CameraTransformTests.h"></ClInclude>
+  </ItemGroup>
+  <ItemGroup><ClInclude Include="Source\Math\Math.h"></ClInclude></ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Rendering\Memory\AllocatedImage.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\Memory\AllocatedImage.h"></ClInclude>
+    <ClCompile Include="Source\Rendering\Frames\DepthTarget.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\Frames\DepthTarget.h"></ClInclude>
+    <ClInclude Include="Tests\Support\RenderProbe.h"></ClInclude>
+    <ClInclude Include="Tests\Rendering\DepthBufferTests.h"></ClInclude>
+    <ClCompile Include="Tests\Rendering\DepthBufferTests.cpp" Condition="'$(RendererSmokeTests)'=='true'"></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Rendering\Resources\Mesh.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\Mesh.h"></ClInclude>
+    <ClCompile Include="Source\Assets\MeshPrimitives.cpp"></ClCompile>
+    <ClInclude Include="Source\Assets\MeshPrimitives.h"></ClInclude>
+    <ClCompile Include="Source\Scene\SceneObject.cpp"></ClCompile>
+    <ClInclude Include="Source\Scene\SceneObject.h"></ClInclude>
+    <ClCompile Include="Source\Rendering\MeshRenderer.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\MeshRenderer.h"></ClInclude>
+    <ClInclude Include="Source\Assets\MeshData.h"></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\MeshTests.cpp" Condition="'$(RendererSmokeTests)'=='true'"></ClCompile>
+    <ClInclude Include="Tests\Rendering\MeshTests.h"></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Shaders\mesh-attributes.frag.slang" Condition="'$(RendererSmokeTests)'=='true'">
+      <FileType>Document</FileType>
+      <Command>"$(SlangCompiler)" "%(FullPath)" $(SlangFlags) -entry Main -stage fragment -o "$(ProjectDir)Shaders\mesh-attributes.spv"
+if errorlevel 1 exit /b 1
+"$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\mesh-attributes.spv"</Command>
+      <Outputs>$(ProjectDir)Shaders\mesh-attributes.spv</Outputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Scene\Lighting.cpp"></ClCompile>
+    <ClInclude Include="Source\Scene\Lighting.h"></ClInclude>
+    <ClCompile Include="Source\Assets\TexturePixels.cpp"></ClCompile>
+    <ClInclude Include="Source\Assets\TexturePixels.h"></ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\Texture.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\Texture.h"></ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\Material.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\Material.h"></ClInclude>
+    <ClCompile Include="Source\Rendering\Resources\SceneResources.cpp"></ClCompile>
+    <ClInclude Include="Source\Rendering\Resources\SceneResources.h"></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\LightingTextureTests.cpp" Condition="'$(RendererSmokeTests)'=='true'"></ClCompile>
+    <ClInclude Include="Tests\Rendering\LightingTextureTests.h"></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Diagnostics\Benchmark.cpp" />
+    <ClInclude Include="Source\Diagnostics\Benchmark.h" />
+    <ClInclude Include="Source\Math\Bounds.h" />
+    <ClCompile Include="Source\ThirdParty\Cgltf.cpp" />
+    <ClCompile Include="Source\Application\DemoScene.cpp" />
+    <ClInclude Include="Source\Application\DemoScene.h" />
+    <ClCompile Include="Source\Math\Frustum.cpp" />
+    <ClInclude Include="Source\Math\Frustum.h" />
+    <ClCompile Include="Source\Assets\GltfDocument.cpp" />
+    <ClInclude Include="Source\Assets\GltfDocument.h" />
+    <ClCompile Include="Source\Assets\GltfGeometry.cpp" />
+    <ClInclude Include="Source\Assets\GltfGeometry.h" />
+    <ClCompile Include="Source\Assets\GltfImages.cpp" />
+    <ClInclude Include="Source\Assets\GltfImages.h" />
+    <ClCompile Include="Source\Assets\GltfLoader.cpp" />
+    <ClInclude Include="Source\Assets\GltfLoader.h" />
+    <ClCompile Include="Source\Diagnostics\GpuTiming.cpp" />
+    <ClInclude Include="Source\Diagnostics\GpuTiming.h" />
+    <ClCompile Include="Source\Assets\ImageDecoder.cpp" />
+    <ClInclude Include="Source\Assets\ImageDecoder.h" />
+    <ClInclude Include="Source\Assets\ModelData.h" />
+    <ClCompile Include="Source\ThirdParty\StbImage.cpp" />
+    <ClInclude Include="Source\Rendering\Resources\TextureSampling.h" />
+    <ClInclude Include="Source\ThirdParty\cgltf\cgltf.h" />
+    <ClInclude Include="Source\ThirdParty\stb\stb_image.h" />
+    <ClCompile Include="Tests\Unit\FrustumTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClInclude Include="Tests\Unit\FrustumTests.h" />
+    <ClCompile Include="Tests\Assets\GltfTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClInclude Include="Tests\Assets\GltfTests.h" />
+    <None Include="Assets\Benchmarks\BenchmarkScene.gltf" />
+    <None Include="Assets\Samples\checker.png" />
+    <None Include="Assets\Samples\SampleScene.bin" />
+    <None Include="Assets\Samples\SampleScene.glb" />
+    <None Include="Assets\Samples\SampleScene.gltf" />
+    <None Include="Tests\Assets\EmbeddedScene.gltf" />
+    <None Include="Tests\Assets\InvalidMaterial.gltf" />
+    <None Include="Tests\Assets\SparseScene.gltf" />
+    <None Include="Tests\Assets\UnsupportedScene.gltf" />
+    <None Include="Source\ThirdParty\cgltf\LICENSE" />
+    <None Include="Source\ThirdParty\cgltf\README.md" />
+    <None Include="Source\ThirdParty\stb\LICENSE" />
+    <None Include="Source\ThirdParty\stb\README.md" />
+  </ItemGroup>
+  <ItemGroup><None Include="Tests\Assets\MaterialScene.gltf" /></ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\IMPLEMENTATION_6.md" />
+    <None Include="Assets\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="CODING_STANDARD.md" />
+    <None Include="Docs\PROJECT_ORGANIZATION.md" />
+    <None Include="Shaders\vert.spv" />
+    <None Include="Shaders\frag.spv" />
+    <None Include="Shaders\mesh-attributes.spv" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\ThirdParty\VMA\LICENSE.txt" />
+    <None Include="Tests\Validation\vk_layer_settings.txt" />
+    <None Include="Tests\GpuValidation\vk_layer_settings.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\ARCHITECTURE.md" />
+  </ItemGroup>
+  <ItemGroup><None Include="Shaders\mesh-common.slang" /></ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\SLANG_MIGRATION.md" />
+  </ItemGroup>
+  <ItemGroup><None Include=".editorconfig" /></ItemGroup>
 </Project>
