@@ -3,9 +3,41 @@
 #include "Rendering/Resources/SceneResources.h"
 #include "Rendering/Resources/Material.h"
 #include "Assets/MeshPrimitives.h"
+#include "Assets/ModelLoader.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <limits>
 #include <vector>
 
 namespace VulkanRenderer {
+namespace {
+constexpr float FLOOR_Y = -1.0f;
+
+void PlaceModel(const std::filesystem::path &path, float height, const glm::vec2 &position,
+				SceneResources &resources, Scene &scene) {
+	auto model = ModelLoader::Read(path);
+	glm::vec3 minimum(std::numeric_limits<float>::max());
+	glm::vec3 maximum(std::numeric_limits<float>::lowest());
+	for (const auto &instance : model.instances) {
+		for (const auto &vertex : model.meshes.at(instance.mesh).vertices) {
+			const auto &P = vertex.position;
+			const glm::vec3 POINT(instance.transform * glm::vec4(P[0], P[1], P[2], P[3]));
+			minimum = glm::min(minimum, POINT);
+			maximum = glm::max(maximum, POINT);
+		}
+	}
+	const float SCALE = height / (maximum.y - minimum.y);
+	const glm::vec3 CENTER = (minimum + maximum) * 0.5f;
+	// Ground the actual transformed geometry, including the imported node transforms.
+	const glm::vec3 OFFSET(position.x - CENTER.x * SCALE, FLOOR_Y - minimum.y * SCALE,
+						   position.y - CENTER.z * SCALE);
+	const auto PLACEMENT = glm::scale(glm::translate(glm::mat4(1), OFFSET), glm::vec3(SCALE));
+	for (auto &instance : model.instances) {
+		instance.transform = PLACEMENT * instance.transform;
+	}
+	ModelLoader::Upload(model, resources, scene);
+}
+} // namespace
+
 void DemoScene::Populate(SceneResources &resources, Scene &scene) {
 	std::vector<uint8_t> checker(64 * 64 * 4);
 	for (uint32_t y = 0; y < 64; ++y) {
@@ -39,7 +71,13 @@ void DemoScene::Populate(SceneResources &resources, Scene &scene) {
 	const uint32_t FLOOR_MATERIAL = resources.AddMaterial(floorMaterial);
 	const auto FLOOR_MESH = resources.CreateMesh(MeshPrimitives::CreatePlane());
 	auto &floor = scene.AddObject(FLOOR_MESH, FLOOR_MATERIAL).GetTransform();
-	floor.SetPosition(glm::vec3(0, -1.0f, 0));
+	floor.SetPosition(glm::vec3(0, FLOOR_Y, 0));
 	floor.SetScale(glm::vec3(10.0f, 1.0f, 10.0f));
+
+	// The full reconstruction preserves the surface topology; the res* meshes do not.
+	PlaceModel("Assets/Models/happy_recon/happy_vrip.ply", 2.2f, {-2.1f, -0.3f}, resources, scene);
+	PlaceModel("Assets/Models/SamplePyramid/Pyramid.obj", 1.4f, {2.2f, -0.4f}, resources, scene);
+	scene.GetCamera().SetPosition({0, 1.0f, 7.0f});
+	scene.GetCamera().Look(0, -0.18f);
 }
 } // namespace VulkanRenderer

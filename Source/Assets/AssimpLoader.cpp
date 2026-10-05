@@ -6,9 +6,122 @@
 #include <cmath>
 #include <stdexcept>
 #include <utility>
+#include <charconv>
+#include <fstream>
+#include <optional>
+#include <string_view>
+#include <limits>
 
 namespace VulkanRenderer {
 namespace {
+// Preserve indexed connectivity for simple ASCII triangle PLYs. Assimp's
+// smooth-normal pass performs spatial searches on this large reconstruction.
+std::optional<ModelData> ReadIndexedPly(const std::filesystem::path &path) {
+	if (path.extension() != ".ply") {
+		return std::nullopt;
+	}
+	std::ifstream input(path);
+	std::string line;
+	if (!std::getline(input, line) || line != "ply"
+		|| !std::getline(input, line) || line != "format ascii 1.0") {
+		return std::nullopt;
+	}
+	size_t vertexCount = 0, faceCount = 0;
+	std::vector<std::string> properties;
+	bool ended = false;
+	while (std::getline(input, line)) {
+		if (line == "end_header") {
+			ended = true;
+			break;
+		}
+		if (line.starts_with("element vertex ")) {
+			vertexCount = std::stoull(line.substr(15));
+		} else if (line.starts_with("element face ")) {
+			faceCount = std::stoull(line.substr(13));
+		} else if (line.starts_with("property ")) {
+			properties.push_back(line);
+		} else if (!line.starts_with("comment ") && !line.starts_with("obj_info ")) {
+			return std::nullopt;
+		}
+	}
+	if (!ended || properties != std::vector<std::string>{"property float x", "property float y",
+		"property float z", "property list uchar int vertex_indices"}) {
+		return std::nullopt;
+	}
+	if (!vertexCount || !faceCount || vertexCount > std::numeric_limits<uint32_t>::max()
+		|| faceCount > std::numeric_limits<uint32_t>::max() / 3) {
+		throw std::runtime_error("PLY has invalid geometry counts");
+	}
+	auto readValue = [](std::string_view &remaining, auto &value) {
+		const auto START = remaining.find_first_not_of(" \t\r");
+		if (START == std::string_view::npos) {
+			throw std::runtime_error("PLY record is incomplete");
+		}
+		remaining.remove_prefix(START);
+		const auto RESULT = std::from_chars(remaining.data(), remaining.data() + remaining.size(), value);
+		if (RESULT.ec != std::errc()) {
+			throw std::runtime_error("PLY record contains an invalid number");
+		}
+		remaining.remove_prefix(static_cast<size_t>(RESULT.ptr - remaining.data()));
+	};
+	MeshData mesh;
+	mesh.vertices.resize(vertexCount);
+	mesh.indices.reserve(faceCount * 3);
+	for (auto &vertex : mesh.vertices) {
+		if (!std::getline(input, line)) {
+			throw std::runtime_error("PLY vertex data is truncated");
+		}
+		std::string_view remaining(line);
+		for (int axis = 0; axis < 3; ++axis) {
+			readValue(remaining, vertex.position[axis]);
+			if (!std::isfinite(vertex.position[axis])) {
+				throw std::runtime_error("PLY position is not finite");
+			}
+		}
+		vertex.position[3] = 1;
+		vertex.normal = {0, 0, 0, 0};
+	}
+	for (size_t face = 0; face < faceCount; ++face) {
+		if (!std::getline(input, line)) {
+			throw std::runtime_error("PLY face data is truncated");
+		}
+		std::string_view remaining(line);
+		uint32_t count = 0;
+		readValue(remaining, count);
+		if (count != 3) {
+			return std::nullopt; // Other polygon layouts use Assimp's triangulator.
+		}
+		uint32_t indices[3];
+		glm::vec3 points[3];
+		for (int corner = 0; corner < 3; ++corner) {
+			readValue(remaining, indices[corner]);
+			if (indices[corner] >= vertexCount) {
+				throw std::runtime_error("PLY face index is outside the vertex array");
+			}
+			const auto &P = mesh.vertices[indices[corner]].position;
+			points[corner] = {P[0], P[1], P[2]};
+			mesh.indices.push_back(indices[corner]);
+		}
+		const auto NORMAL = glm::cross(points[1] - points[0], points[2] - points[0]);
+		for (auto index : indices) {
+			for (int axis = 0; axis < 3; ++axis) {
+				mesh.vertices[index].normal[axis] += NORMAL[axis];
+			}
+		}
+	}
+	for (auto &vertex : mesh.vertices) {
+		auto &n = vertex.normal;
+		const glm::vec3 NORMAL(n[0], n[1], n[2]);
+		const float LENGTH = glm::length(NORMAL);
+		const auto UNIT = LENGTH > 0 ? NORMAL / LENGTH : glm::vec3(0, 1, 0);
+		n = {UNIT.x, UNIT.y, UNIT.z, 0};
+	}
+	ModelData model;
+	model.meshes.push_back(std::move(mesh));
+	model.instances.push_back({0, NO_MODEL_RESOURCE, glm::mat4(1)});
+	return model;
+}
+
 glm::mat4 Matrix(const aiMatrix4x4 &matrix) {
 	return {matrix.a1, matrix.b1, matrix.c1, matrix.d1, matrix.a2, matrix.b2, matrix.c2, matrix.d2,
 			matrix.a3, matrix.b3, matrix.c3, matrix.d3, matrix.a4, matrix.b4, matrix.c4, matrix.d4};
@@ -62,6 +175,9 @@ MeshData Geometry(const aiMesh &mesh) {
 } // namespace
 
 ModelData AssimpLoader::Read(const std::filesystem::path &path) {
+	if (auto indexed = ReadIndexedPly(path)) {
+		return std::move(*indexed);
+	}
 	Assimp::Importer importer;
 	const auto *scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices
 															 | aiProcess_GenSmoothNormals

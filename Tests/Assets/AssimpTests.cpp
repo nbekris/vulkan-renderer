@@ -38,6 +38,19 @@ uint32_t Allocations(const MemoryAllocator &allocator) {
 } // namespace
 
 void RunAssimpTests(const VulkanContext &context, const MemoryAllocator &allocator, const SwapChain &swapChain) {
+	const auto PLY = ModelLoader::Read("Tests/Assets/IndexedTetrahedron.ply");
+	Require(PLY.meshes.size() == 1 && PLY.instances.size() == 1
+		&& PLY.meshes[0].vertices.size() == 4
+		&& PLY.meshes[0].indices == std::vector<uint32_t>{0, 2, 1, 0, 1, 3, 0, 3, 2, 1, 2, 3},
+		"indexed PLY import changed surface connectivity or winding");
+	for (const auto &vertex : PLY.meshes[0].vertices) {
+		const glm::vec3 NORMAL(vertex.normal[0], vertex.normal[1], vertex.normal[2]);
+		const glm::vec3 POSITION(vertex.position[0], vertex.position[1], vertex.position[2]);
+		Require(std::abs(glm::length(NORMAL) - 1) < .001f && glm::dot(NORMAL, POSITION) > 0,
+			"indexed PLY smooth normals are not outward unit vectors");
+	}
+	Reject([] { ModelLoader::Read("Tests/Assets/InvalidIndex.ply"); },
+		"indexed PLY import accepted an out-of-range face index");
 	const auto MODEL = ModelLoader::Read("Assets/Models/SamplePyramid");
 	Require(MODEL.meshes.size() == 1 && MODEL.instances.size() == 1 && MODEL.textures.size() == 1,
 			"Assimp folder import lost geometry, instances, or textures");

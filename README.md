@@ -3,6 +3,8 @@
 A Vulkan 1.3 renderer with Slang shaders, static glTF import, physically based lighting,
 directional shadows, Assimp model import, and GPU validation tests.
 
+![Default scene with Happy Buddha, two textured cubes, and the sample pyramid](Docs/Images/scene.png)
+
 ## Build
 
 Use Visual Studio/MSBuild with the C++ toolchain and Vulkan SDK installed. The SDK must
@@ -30,7 +32,7 @@ Device selection checks required features and descriptor limits and reports unsu
 
 **WASD** moves, **Q/E** descends/ascends, and **Left Shift** increases speed. Hold the
 **right mouse button** to look and press **Escape** to close. Input pauses when unfocused.
-The default scene contains two textured cubes and a floor.
+The default scene contains Happy Buddha, two textured cubes, and the sample pyramid on a floor.
 
 ## Models and benchmarks
 
