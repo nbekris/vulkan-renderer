@@ -85,7 +85,7 @@ void GraphicsPipeline::Initialize(VkFormat colorFormat, VkExtent2D extent, const
 		= VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
 	VkPipelineColorBlendStateCreateInfo blending{};
 	blending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-	blending.attachmentCount = 1;
+	blending.attachmentCount = colorFormat == VK_FORMAT_UNDEFINED ? 0 : 1;
 	blending.pAttachments = &blendAttachment;
 	VkPipelineLayoutCreateInfo layoutInfo{};
 	layoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -104,7 +104,7 @@ void GraphicsPipeline::Initialize(VkFormat colorFormat, VkExtent2D extent, const
 	info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	VkPipelineRenderingCreateInfo rendering{};
 	rendering.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-	rendering.colorAttachmentCount = 1;
+	rendering.colorAttachmentCount = blending.attachmentCount;
 	rendering.pColorAttachmentFormats = &colorFormat;
 	rendering.depthAttachmentFormat = depthFormat;
 	info.pNext = &rendering;

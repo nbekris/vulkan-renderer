@@ -35,6 +35,8 @@ ModelData GltfLoader::Read(const std::filesystem::path &path) {
 		}
 		MaterialData material;
 		std::copy_n(source->pbr_metallic_roughness.base_color_factor, 4, material.tint.begin());
+		material.metallic = source->pbr_metallic_roughness.metallic_factor;
+		material.roughness = source->pbr_metallic_roughness.roughness_factor;
 		material.unlit = source->unlit ? 1u : 0u;
 		material.alphaCutoff = source->alpha_mode == cgltf_alpha_mode_mask ? source->alpha_cutoff : -1.0f;
 		material.textureIndex = NO_MODEL_RESOURCE;

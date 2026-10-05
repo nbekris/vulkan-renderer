@@ -39,27 +39,29 @@ void GlobalDescriptors::CreateLayout() {
 		= {{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MAX_FRAMES_IN_FLIGHT,
 			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, nullptr},
 		   {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, MATERIAL_CAPACITY, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr},
-		   {2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_CAPACITY, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}};
+		   {2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_CAPACITY, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr},
+		   {3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_FRAMES_IN_FLIGHT, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}};
 	const VkDescriptorBindingFlags FLAGS[]
 		= {VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT, VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT,
-		   VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT};
+		   VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT, VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT};
 	VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlags{};
 	bindingFlags.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
-	bindingFlags.bindingCount = 3;
+	bindingFlags.bindingCount = 4;
 	bindingFlags.pBindingFlags = FLAGS;
 	VkDescriptorSetLayoutCreateInfo layout{};
 	layout.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 	layout.pNext = &bindingFlags;
-	layout.bindingCount = 3;
+	layout.bindingCount = 4;
 	layout.pBindings = BINDINGS;
 	CheckVulkan(vkCreateDescriptorSetLayout(_context.GetDevice(), &layout, nullptr, &_layout),
 				"failed to create descriptor layout");
 }
 
 void GlobalDescriptors::CreatePool() {
-	const VkDescriptorPoolSize SIZES[] = {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MAX_FRAMES_IN_FLIGHT},
-										  {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, MATERIAL_CAPACITY},
-										  {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_CAPACITY}};
+	const VkDescriptorPoolSize SIZES[]
+		= {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, MAX_FRAMES_IN_FLIGHT},
+		   {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, MATERIAL_CAPACITY},
+		   {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, TEXTURE_CAPACITY + MAX_FRAMES_IN_FLIGHT}};
 	VkDescriptorPoolCreateInfo pool{};
 	pool.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	pool.maxSets = 1;
@@ -89,7 +91,14 @@ void GlobalDescriptors::WriteDescriptors() {
 	for (uint32_t i = 0; i < _resources.GetTextureCount(); ++i) {
 		textures.push_back(_resources.GetTexture(i).GetDescriptor());
 	}
-	VkWriteDescriptorSet writes[3]{};
+	std::vector<VkDescriptorImageInfo> shadows;
+	for (uint32_t i = 0; i < _frames.GetCount(); ++i) {
+		const auto &TARGET = _frames.GetFrame(i).GetShadowTarget();
+		if (TARGET.GetFormat() != VK_FORMAT_UNDEFINED) {
+			shadows.push_back(TARGET.GetDescriptor());
+		}
+	}
+	VkWriteDescriptorSet writes[4]{};
 	writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	writes[0].dstSet = _set;
 	writes[0].dstBinding = 0;
@@ -108,7 +117,13 @@ void GlobalDescriptors::WriteDescriptors() {
 	writes[2].descriptorCount = static_cast<uint32_t>(textures.size());
 	writes[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	writes[2].pImageInfo = textures.data();
-	vkUpdateDescriptorSets(_context.GetDevice(), 3, writes, 0, nullptr);
+	writes[3].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writes[3].dstSet = _set;
+	writes[3].dstBinding = 3;
+	writes[3].descriptorCount = static_cast<uint32_t>(shadows.size());
+	writes[3].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	writes[3].pImageInfo = shadows.data();
+	vkUpdateDescriptorSets(_context.GetDevice(), shadows.empty() ? 3 : 4, writes, 0, nullptr);
 }
 
 bool GlobalDescriptors::IsMaterialBound(uint32_t index) const noexcept {

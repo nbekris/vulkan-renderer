@@ -16,6 +16,10 @@ void Material::Initialize(const MaterialData &data) {
 		|| data.unlit > 1) {
 		throw std::invalid_argument("invalid material alpha cutoff or unlit flag");
 	}
+	if (!std::isfinite(data.metallic) || data.metallic < 0 || data.metallic > 1 || !std::isfinite(data.roughness)
+		|| data.roughness < 0 || data.roughness > 1) {
+		throw std::invalid_argument("metallic and roughness must be finite and within zero to one");
+	}
 	_buffer.Initialize(sizeof(data), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 	_buffer.Upload(&data, sizeof(data));
 }

@@ -29,10 +29,12 @@ uint32_t AllocationCount(const MemoryAllocator &allocator) {
 }
 
 void VerifyImportData() {
-	for (const auto *path : {"Assets/Samples/SampleScene.gltf", "Assets/Samples/SampleScene.glb", "Tests/Assets/EmbeddedScene.gltf"}) {
+	for (const auto *path :
+		 {"Assets/Samples/SampleScene.gltf", "Assets/Samples/SampleScene.glb", "Tests/Assets/EmbeddedScene.gltf"}) {
 		const auto MODEL = GltfLoader::Read(path);
 		Require(MODEL.meshes.size() == 1 && MODEL.instances.size() == 2 && MODEL.textures.size() == 1
-					&& MODEL.materials.size() == 1,
+					&& MODEL.materials.size() == 1 && MODEL.materials[0].metallic == 0
+					&& MODEL.materials[0].roughness == 1,
 				"glTF resources were duplicated or omitted");
 		Require(MODEL.meshes[0].vertices.size() == 24 && MODEL.meshes[0].indices.size() == 36,
 				"glTF cube topology changed");

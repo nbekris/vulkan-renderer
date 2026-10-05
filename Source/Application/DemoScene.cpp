@@ -17,8 +17,11 @@ void DemoScene::Populate(SceneResources &resources, Scene &scene) {
 		}
 	}
 	MaterialData textured;
+	textured.roughness = 0.25f;
 	textured.textureIndex = resources.AddTexture({64, 64}, checker);
 	const uint32_t FIRST_MATERIAL = resources.AddMaterial(textured);
+	textured.metallic = 0.8f;
+	textured.roughness = 0.35f;
 	textured.tint = {0.55f, 0.8f, 1.0f, 1.0f};
 	const uint32_t SECOND_MATERIAL = resources.AddMaterial(textured);
 	const auto cube = resources.CreateMesh(MeshPrimitives::CreateCube());
@@ -29,5 +32,14 @@ void DemoScene::Populate(SceneResources &resources, Scene &scene) {
 	second.SetPosition(glm::vec3(0.7f, 0, -0.6f));
 	second.SetRotation(glm::vec3(-0.2f, -0.5f, 0.25f));
 	second.SetScale(glm::vec3(0.8f));
+
+	MaterialData floorMaterial;
+	floorMaterial.tint = {0.45f, 0.45f, 0.45f, 1.0f};
+	floorMaterial.roughness = 0.8f;
+	const uint32_t FLOOR_MATERIAL = resources.AddMaterial(floorMaterial);
+	const auto FLOOR_MESH = resources.CreateMesh(MeshPrimitives::CreatePlane());
+	auto &floor = scene.AddObject(FLOOR_MESH, FLOOR_MATERIAL).GetTransform();
+	floor.SetPosition(glm::vec3(0, -1.0f, 0));
+	floor.SetScale(glm::vec3(10.0f, 1.0f, 10.0f));
 }
 } // namespace VulkanRenderer

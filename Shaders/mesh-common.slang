@@ -13,6 +13,9 @@ struct FrameUniform {
 	float4x4 transform;
 	float4 lightDirection;
 	float4 lightColor;
+	float4 cameraPosition;
+	float4x4 lightTransform;
+	float4 shadowParameters;
 };
 
 struct MaterialData {
@@ -20,7 +23,11 @@ struct MaterialData {
 	uint textureIndex;
 	float alphaCutoff;
 	uint unlit;
-	uint padding;
+	float metallic;
+	float roughness;
+	uint padding0;
+	uint padding1;
+	uint padding2;
 };
 
 struct DrawData {
@@ -35,6 +42,7 @@ struct VertexOutput {
 	[[vk::location(0)]] float4 color : COLOR0;
 	[[vk::location(1)]] float3 worldNormal : NORMAL0;
 	[[vk::location(2)]] float2 texCoord : TEXCOORD0;
+	[[vk::location(3)]] float3 worldPosition : TEXCOORD1;
 };
 
 [[vk::binding(0, 0)]] ConstantBuffer<FrameUniform> frames[MAX_FRAMES_IN_FLIGHT];

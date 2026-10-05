@@ -146,7 +146,8 @@ void RunLightingTextureTests(const VulkanContext &context, const MemoryAllocator
 	scene.GetLighting().SetIntensity(1);
 	auto uniform = scene.GetFrameUniform(1);
 	uniform.transform = FrameUniform{}.transform;
-	Require(RENDER(uniform)[0] > 245, "aligned directional light did not illuminate the surface");
+	Require(std::abs(static_cast<int>(RENDER(uniform)[0]) - OutputByte(0.356507f, swapChain.GetImageFormat())) <= 3,
+			"aligned directional light did not illuminate the surface");
 	scene.GetLighting().SetDirection(glm::vec3(0, 0, -1));
 	uniform = scene.GetFrameUniform(1);
 	uniform.transform = FrameUniform{}.transform;
@@ -167,11 +168,11 @@ void RunLightingTextureTests(const VulkanContext &context, const MemoryAllocator
 		slot.Prepare(uniform);
 		probe.Render(renderer, slot, i);
 		pixel = probe.GetCenterRgba();
-		Require(
-			std::abs(static_cast<int>(pixel[0]) - OutputByte(static_cast<float>(i) * 0.5f, swapChain.GetImageFormat()))
-					<= 3
-				&& pixel[1] < 3 && pixel[2] < 3,
-			"per-frame light intensity/color did not reach the fragment shader");
+		Require(std::abs(static_cast<int>(pixel[0])
+						 - OutputByte(0.356507f * static_cast<float>(i) * 0.5f, swapChain.GetImageFormat()))
+						<= 3
+					&& pixel[1] < 3 && pixel[2] < 3,
+				"per-frame light intensity/color did not reach the fragment shader");
 	}
 	Scene tiny;
 	tiny.AddObject(minified, CHECKER_MATERIAL);

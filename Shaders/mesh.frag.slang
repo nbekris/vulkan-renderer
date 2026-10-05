@@ -1,4 +1,6 @@
 #include "mesh-common.slang"
+#include "brdf.slang"
+#include "shadow-common.slang"
 
 using namespace VulkanRenderer;
 
@@ -15,12 +17,19 @@ namespace VulkanRenderer {
 	if (MATERIAL.alphaCutoff >= 0.0 && ALBEDO.a < MATERIAL.alphaCutoff) {
 		discard;
 	}
-	const float4 LIGHT = frames[draw.frameIndex].lightDirection;
-	const float4 COLOR = frames[draw.frameIndex].lightColor;
-	const float DIFFUSE = max(dot(normalize(input.worldNormal), normalize(LIGHT.xyz)), 0.0);
-	float3 illumination = COLOR.www + COLOR.rgb * LIGHT.w * DIFFUSE;
 	if (MATERIAL.unlit != 0) {
-		illumination = float3(1.0);
+		return float4(ALBEDO.rgb, MATERIAL.alphaCutoff < 0.0 ? 1.0 : ALBEDO.a);
 	}
-	return float4(ALBEDO.rgb * illumination, MATERIAL.alphaCutoff < 0.0 ? 1.0 : ALBEDO.a);
+	const FrameUniform FRAME = frames[draw.frameIndex];
+	const float3 NORMAL = SafeNormalize(input.worldNormal, float3(0, 0, 1));
+	const float3 VIEW = SafeNormalize(FRAME.cameraPosition.xyz - input.worldPosition, NORMAL);
+	const float3 LIGHT = SafeNormalize(FRAME.lightDirection.xyz, NORMAL);
+	const float NORMAL_LIGHT = saturate(dot(NORMAL, LIGHT));
+	const float3 BASE_COLOR = saturate(ALBEDO.rgb);
+	const float3 DIRECT = EvaluateBrdf(BASE_COLOR, MATERIAL.metallic, MATERIAL.roughness, NORMAL, VIEW, LIGHT)
+						  * FRAME.lightColor.rgb * FRAME.lightDirection.w * NORMAL_LIGHT
+						  * ShadowVisibility(FRAME, input.worldPosition, NORMAL_LIGHT);
+	// Ambient remains a diffuse approximation until environment-map lighting is implemented.
+	const float3 RADIANCE = DIRECT + BASE_COLOR * FRAME.lightColor.w * (1.0 - MATERIAL.metallic);
+	return float4(RADIANCE, MATERIAL.alphaCutoff < 0.0 ? 1.0 : ALBEDO.a);
 }

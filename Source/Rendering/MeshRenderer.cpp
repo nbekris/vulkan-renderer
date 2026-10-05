@@ -12,7 +12,22 @@
 
 namespace VulkanRenderer {
 MeshRenderer::MeshRenderer(const VulkanContext &context, const GlobalDescriptors &descriptors)
-	: _descriptors(descriptors), _pipeline(context) {
+	: _descriptors(descriptors), _pipeline(context), _context(context) {
+}
+
+void MeshRenderer::EnableShadows(const FrameRing &frames) {
+	if (_shadows) {
+		throw std::logic_error("shadow pass already initialized");
+	}
+	_shadows = std::make_unique<ShadowPass>(_context, _descriptors, frames);
+	_shadows->Initialize();
+}
+
+void MeshRenderer::RecordBeforeRendering(VkCommandBuffer commandBuffer, uint32_t frameIndex) const {
+	if (_shadows && _scene) {
+		ValidateScene(*_scene);
+		_shadows->Record(commandBuffer, frameIndex, *_scene);
+	}
 }
 
 void MeshRenderer::Initialize(const SwapChain &swapChain, VkFormat depthFormat) {

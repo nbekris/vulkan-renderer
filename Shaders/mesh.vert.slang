@@ -17,7 +17,9 @@ float3 TransformNormal(float3 normal, float3x3 model) {
 [shader("vertex")] VertexOutput Main(uint vertexIndex : SV_VulkanVertexID) {
 	const Vertex VERTEX = draw.vertices[vertexIndex];
 	VertexOutput output;
-	output.position = mul(frames[draw.frameIndex].transform, mul(draw.model, VERTEX.position));
+	const float4 WORLD_POSITION = mul(draw.model, VERTEX.position);
+	output.position = mul(frames[draw.frameIndex].transform, WORLD_POSITION);
+	output.worldPosition = WORLD_POSITION.xyz;
 	output.color = VERTEX.color;
 	output.worldNormal = TransformNormal(VERTEX.normal.xyz, (float3x3)draw.model);
 	output.texCoord = VERTEX.uv.xy;

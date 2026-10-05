@@ -27,6 +27,8 @@ FrameUniform Scene::GetFrameUniform(float aspectRatio) const {
 	const auto COLOR = _lighting.GetColor();
 	uniform.lightDirection = {DIRECTION.x, DIRECTION.y, DIRECTION.z, _lighting.GetIntensity()};
 	uniform.lightColor = {COLOR.x, COLOR.y, COLOR.z, _lighting.GetAmbient()};
+	const auto POSITION = _camera.GetPosition();
+	uniform.cameraPosition = {POSITION.x, POSITION.y, POSITION.z, 1};
 	return uniform;
 }
 } // namespace VulkanRenderer

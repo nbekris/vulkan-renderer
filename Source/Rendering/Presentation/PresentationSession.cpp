@@ -4,6 +4,7 @@
 #include "Rendering/Frames/DepthTarget.h"
 #include "Rendering/Frames/FrameResources.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <algorithm>
 
 namespace VulkanRenderer {
 
@@ -22,9 +23,10 @@ VkExtent2D PresentationSession::GetDepthExtent() const {
 void PresentationSession::Initialize() {
 	_swapChain.Initialize();
 	const VkFormat DEPTH_FORMAT = DepthTarget::SelectFormat(_context);
-	_frames.Initialize(_FRAMES_IN_FLIGHT, _swapChain.GetExtent(), DEPTH_FORMAT, _PROFILE);
+	_frames.Initialize(_FRAMES_IN_FLIGHT, _swapChain.GetExtent(), DEPTH_FORMAT, _PROFILE, true);
 	_descriptors.Initialize();
 	_meshes.Initialize(_swapChain, DEPTH_FORMAT);
+	_meshes.EnableShadows(_frames);
 	_renderer.Initialize();
 }
 
@@ -38,10 +40,14 @@ bool PresentationSession::DrawFrame() {
 		return false;
 	}
 	const auto EXTENT = GetExtent();
-	const auto UNIFORM
-		= _scene ? _scene->GetFrameUniform(static_cast<float>(EXTENT.width) / EXTENT.height) : FrameUniform{};
-	_meshes.SetViewProjection(glm::make_mat4(UNIFORM.transform.data()));
-	return _renderer.DrawFrame(UNIFORM);
+	auto uniform = _scene ? _scene->GetFrameUniform(static_cast<float>(EXTENT.width) / EXTENT.height) : FrameUniform{};
+	_meshes.SetViewProjection(glm::make_mat4(uniform.transform.data()));
+	if (_scene) {
+		const auto LIGHT_TRANSFORM = ShadowPass::GetLightTransform(*_scene);
+		std::copy_n(glm::value_ptr(LIGHT_TRANSFORM), uniform.lightTransform.size(), uniform.lightTransform.begin());
+		uniform.shadowParameters[0] = 1;
+	}
+	return _renderer.DrawFrame(uniform);
 }
 
 } // namespace VulkanRenderer

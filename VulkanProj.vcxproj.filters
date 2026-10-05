@@ -539,4 +539,28 @@
   <ItemGroup>
     <None Include=".editorconfig"><Filter>Documentation</Filter></None>
   </ItemGroup>
+  <ItemGroup><None Include="Shaders\brdf.slang"><Filter>Shaders</Filter></None></ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\PbrTests.cpp"><Filter>Tests\Rendering</Filter></ClCompile>
+    <ClInclude Include="Tests\Rendering\PbrTests.h"><Filter>Tests\Rendering</Filter></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\PBR.md"><Filter>Docs</Filter></None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Rendering\Frames\ShadowTarget.cpp"><Filter>Source\Rendering\Frames</Filter></ClCompile>
+    <ClInclude Include="Source\Rendering\Frames\ShadowTarget.h"><Filter>Source\Rendering\Frames</Filter></ClInclude>
+    <ClCompile Include="Source\Rendering\ShadowPass.cpp"><Filter>Source\Rendering</Filter></ClCompile>
+    <ClInclude Include="Source\Rendering\ShadowPass.h"><Filter>Source\Rendering</Filter></ClInclude>
+    <CustomBuild Include="Shaders\shadow.vert.slang"><Filter>Shaders</Filter></CustomBuild>
+    <CustomBuild Include="Shaders\shadow.frag.slang"><Filter>Shaders</Filter></CustomBuild>
+    <None Include="Shaders\shadow-common.slang"><Filter>Shaders</Filter></None>
+    <None Include="Shaders\shadow-vert.spv"><Filter>Shaders</Filter></None>
+    <None Include="Shaders\shadow-frag.spv"><Filter>Shaders</Filter></None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\ShadowTests.cpp"><Filter>Tests\Rendering</Filter></ClCompile>
+    <ClInclude Include="Tests\Rendering\ShadowTests.h"><Filter>Tests\Rendering</Filter></ClInclude>
+  </ItemGroup>
+  <ItemGroup><None Include="Docs\SHADOWS.md"><Filter>Docs</Filter></None></ItemGroup>
 </Project>

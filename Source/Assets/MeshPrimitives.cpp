@@ -11,6 +11,16 @@ MeshData MeshPrimitives::CreateTriangle() {
 	return data;
 }
 
+MeshData MeshPrimitives::CreatePlane() {
+	MeshData data;
+	data.vertices = {{{-0.5f, 0, -0.5f, 1}, {1, 1, 1, 1}, {0, 1, 0, 0}, {0, 0, 0, 0}},
+					 {{-0.5f, 0, 0.5f, 1}, {1, 1, 1, 1}, {0, 1, 0, 0}, {0, 1, 0, 0}},
+					 {{0.5f, 0, 0.5f, 1}, {1, 1, 1, 1}, {0, 1, 0, 0}, {1, 1, 0, 0}},
+					 {{0.5f, 0, -0.5f, 1}, {1, 1, 1, 1}, {0, 1, 0, 0}, {1, 0, 0, 0}}};
+	data.indices = {0, 1, 2, 0, 2, 3};
+	return data;
+}
+
 MeshData MeshPrimitives::CreateCube() {
 	MeshData data;
 	// Four vertices per face preserve hard normals and independent face UVs.

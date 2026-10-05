@@ -172,7 +172,7 @@
 if errorlevel 1 exit /b 1
 "$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\vert.spv"</Command>
       <Outputs>$(ProjectDir)Shaders\vert.spv</Outputs>
-      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;$(ProjectDir)Shaders\brdf.slang;$(ProjectDir)Shaders\shadow-common.slang;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="Shaders\mesh.frag.slang">
       <FileType>Document</FileType>
@@ -180,7 +180,7 @@ if errorlevel 1 exit /b 1
 if errorlevel 1 exit /b 1
 "$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\frag.spv"</Command>
       <Outputs>$(ProjectDir)Shaders\frag.spv</Outputs>
-      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;$(ProjectDir)Shaders\brdf.slang;$(ProjectDir)Shaders\shadow-common.slang;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Condition="'$(RendererSmokeTests)'=='true'">
@@ -285,7 +285,7 @@ if errorlevel 1 exit /b 1
 if errorlevel 1 exit /b 1
 "$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\mesh-attributes.spv"</Command>
       <Outputs>$(ProjectDir)Shaders\mesh-attributes.spv</Outputs>
-      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;$(ProjectDir)Shaders\brdf.slang;$(ProjectDir)Shaders\shadow-common.slang;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -374,4 +374,42 @@ if errorlevel 1 exit /b 1
     <None Include="Docs\SLANG_MIGRATION.md" />
   </ItemGroup>
   <ItemGroup><None Include=".editorconfig" /></ItemGroup>
+  <ItemGroup><None Include="Shaders\brdf.slang" /></ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\PbrTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClInclude Include="Tests\Rendering\PbrTests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\PBR.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Rendering\Frames\ShadowTarget.cpp" />
+    <ClInclude Include="Source\Rendering\Frames\ShadowTarget.h" />
+    <ClCompile Include="Source\Rendering\ShadowPass.cpp" />
+    <ClInclude Include="Source\Rendering\ShadowPass.h" />
+    <CustomBuild Include="Shaders\shadow.vert.slang">
+      <FileType>Document</FileType>
+      <Command>"$(SlangCompiler)" "%(FullPath)" $(SlangFlags) -entry Main -stage vertex -o "$(ProjectDir)Shaders\shadow-vert.spv"
+if errorlevel 1 exit /b 1
+"$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\shadow-vert.spv"</Command>
+      <Outputs>$(ProjectDir)Shaders\shadow-vert.spv</Outputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;$(ProjectDir)Shaders\brdf.slang;$(ProjectDir)Shaders\shadow-common.slang;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="Shaders\shadow.frag.slang">
+      <FileType>Document</FileType>
+      <Command>"$(SlangCompiler)" "%(FullPath)" $(SlangFlags) -capability $(SlangBindlessCapabilities) -entry Main -stage fragment -o "$(ProjectDir)Shaders\shadow-frag.spv"
+if errorlevel 1 exit /b 1
+"$(SpirvValidator)" --target-env vulkan1.3 "$(ProjectDir)Shaders\shadow-frag.spv"</Command>
+      <Outputs>$(ProjectDir)Shaders\shadow-frag.spv</Outputs>
+      <AdditionalInputs>$(ProjectDir)Shaders\mesh-common.slang;$(ProjectDir)Shaders\brdf.slang;$(ProjectDir)Shaders\shadow-common.slang;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+    <None Include="Shaders\shadow-common.slang" />
+    <None Include="Shaders\shadow-vert.spv" />
+    <None Include="Shaders\shadow-frag.spv" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Tests\Rendering\ShadowTests.cpp" Condition="'$(RendererSmokeTests)'=='true'" />
+    <ClInclude Include="Tests\Rendering\ShadowTests.h" />
+  </ItemGroup>
+  <ItemGroup><None Include="Docs\SHADOWS.md" /></ItemGroup>
 </Project>

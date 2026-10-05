@@ -14,7 +14,8 @@ FrameResources &FrameRing::GetFrame(uint32_t index) const {
 	return *_frames.at(index);
 }
 
-void FrameRing::Initialize(uint32_t frameCount, VkExtent2D depthExtent, VkFormat depthFormat, bool profile) {
+void FrameRing::Initialize(uint32_t frameCount, VkExtent2D depthExtent, VkFormat depthFormat, bool profile,
+						   bool shadows) {
 	if (!_frames.empty()) {
 		throw std::logic_error("frame ring already initialized");
 	}
@@ -23,7 +24,7 @@ void FrameRing::Initialize(uint32_t frameCount, VkExtent2D depthExtent, VkFormat
 	}
 	for (uint32_t i = 0; i < frameCount; ++i) {
 		auto frame = std::make_unique<FrameResources>(_context, _allocator);
-		frame->Initialize(depthExtent, depthFormat, profile);
+		frame->Initialize(depthExtent, depthFormat, profile, shadows);
 		_frames.push_back(std::move(frame));
 	}
 }

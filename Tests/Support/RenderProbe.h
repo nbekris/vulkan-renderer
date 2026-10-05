@@ -76,6 +76,7 @@ public:
 		VkCommandBufferBeginInfo begin{};
 		begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 		CheckVulkan(vkBeginCommandBuffer(COMMAND, &begin), "failed to begin probe");
+		triangle.RecordBeforeRendering(COMMAND, frameIndex);
 		Transition(COMMAND, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 				   VK_PIPELINE_STAGE_2_NONE, 0, VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
 				   VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT);

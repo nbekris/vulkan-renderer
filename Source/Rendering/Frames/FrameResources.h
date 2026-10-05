@@ -3,6 +3,7 @@
 #include "Rendering/RenderData.h"
 #include "Rendering/Frames/DepthTarget.h"
 #include "Diagnostics/GpuTiming.h"
+#include "Rendering/Frames/ShadowTarget.h"
 
 namespace VulkanRenderer {
 class VulkanContext;
@@ -23,9 +24,12 @@ public:
 
 	const DepthTarget &GetDepthTarget() const noexcept { return _depthTarget; }
 
+	const ShadowTarget &GetShadowTarget() const noexcept { return _shadowTarget; }
+
 	GpuTiming &GetTiming() noexcept { return _timing; }
 
-	void Initialize(VkExtent2D depthExtent = {}, VkFormat depthFormat = VK_FORMAT_UNDEFINED, bool profile = false);
+	void Initialize(VkExtent2D depthExtent = {}, VkFormat depthFormat = VK_FORMAT_UNDEFINED, bool profile = false,
+					bool shadows = false);
 	void Wait();
 	void Prepare(const FrameUniform &uniform);
 
@@ -39,6 +43,7 @@ private:
 	AllocatedBuffer _uniformBuffer;
 	DepthTarget _depthTarget;
 	GpuTiming _timing;
+	ShadowTarget _shadowTarget;
 	VkCommandPool _commandPool = VK_NULL_HANDLE;
 	VkCommandBuffer _commandBuffer = VK_NULL_HANDLE;
 	VkSemaphore _imageAvailable = VK_NULL_HANDLE;

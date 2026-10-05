@@ -90,7 +90,7 @@ immutable mesh ownership and stores its own node/local transforms and material i
 implementations without depending on scene-mesh details. It performs optional CPU frustum culling,
 binds the pipeline and descriptor table, then pushes each visible object's mesh address, model
 matrix, frame index, and material index. The GPU uses buffer-device-address vertex pulling,
-dynamic rendering, depth testing, and textured Lambert/unlit material shading.
+dynamic rendering, depth testing, and textured Cook-Torrance PBR/unlit material shading.
 
 ## One frame: CPU/GPU handoff
 

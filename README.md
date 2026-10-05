@@ -93,7 +93,7 @@ All project classes live in the `VulkanRenderer` namespace.
 | `ShaderModule` | SPIR-V loading and shader module ownership |
 | `GraphicsPipeline` | Graphics pipeline creation and binding |
 | `Mesh`, `MeshData` | Arbitrary device-address vertex data and 32-bit indexed drawing |
-| `MeshPrimitives` | CPU triangle/cube geometry with normals and UVs |
+| `MeshPrimitives` | CPU triangle/cube/plane geometry with normals and UVs |
 | `SceneObject`, `Scene` | Shared mesh references, independent transforms/materials, and camera |
 | `MeshRenderer` | Shared pipeline and descriptor binding for all scene meshes |
 | `FrameRenderer` | Command recording, submission, and synchronization |
@@ -205,7 +205,7 @@ The 64-byte, 16-byte-aligned `Vertex` contains position, color, normal, and UV f
 checks match the shader's std430 buffer-reference layout. The vertex shader transforms normals
 using the inverse transpose of the model matrix, including nonuniform scale, and passes UVs through
 to the fragment interface. The color shader multiplies sampled albedo, vertex color, and material tint,
-then applies ambient and Lambert directional illumination. Singular object scales are rejected.
+then applies a Cook-Torrance BRDF for directional illumination plus a diffuse ambient approximation. Singular object scales are rejected.
 
 `Scene::AddObject` accepts a shared initialized mesh and a material index. Each `SceneObject` owns
 its independent `Transform`, and `MeshRenderer` draws visible objects using their mesh addresses, index
@@ -270,8 +270,8 @@ wrap modes, sRGB mipmaps, indexed/unindexed triangles, triangle strips/fans, int
 normalized integers, sparse vertex attributes, and generated flat normals when normals are absent.
 The importer uses pinned, licensed cgltf 1.15 and stb_image copies under `Source/ThirdParty`.
 
-This is static geometry rendered with the existing Lambert shader, not a complete glTF PBR renderer.
-Metallic/roughness, normal, occlusion, and emissive maps are not applied; animation playback and glTF
+Static geometry uses metallic/roughness factors with direct-light PBR. It is not a complete glTF renderer.
+Metallic/roughness texture maps, normal, occlusion, and emissive maps are not applied; animation playback and glTF
 cameras/lights are not imported. Skinning, morph targets, alpha blending, sparse index accessors,
 Draco/meshopt compression, unsupported required extensions, and EXT_mesh_gpu_instancing produce
 explicit errors. KTX2/WebP texture extensions require a PNG/JPEG fallback. Empty selected scenes,
@@ -338,7 +338,7 @@ and `mesh-attributes.spv`; pipeline SPIR-V entry names remain `main` (Slang's de
 (frame buffers), 1 (material storage buffers), and 2 (combined samplers). Typed vertex pointers
 preserve buffer-device-address vertex pulling and the 64-byte vertex stride. Push constants retain
 pointer/frame/material/model offsets 0/8/12/16 and total size 80 bytes. Material buffers retain a
-32-byte layout. The vertex stage uses `SV_VulkanVertexID` to preserve indexed Vulkan vertex IDs.
+48-byte layout. The vertex stage uses `SV_VulkanVertexID` to preserve indexed Vulkan vertex IDs.
 Normal transformation uses cofactor rows divided by the determinant, equivalent to inverse-transpose.
 
 Slang 2026.8 declares a broad capability set for `NonUniformResourceIndex`; the fragment build
@@ -354,3 +354,47 @@ Slang shaders follow the applicable rules in `CODING_STANDARD.md`: tab indentati
 120-column formatting, PascalCase functions/types, uppercase constants, camelCase mutable values,
 and namespaced shared types/resources. Source entry functions are `Main`; Slang emits `main` for
 the Vulkan pipeline. `.editorconfig` applies the text-formatting rules to `.slang` files in Visual Studio.
+
+## Physically based directional lighting
+
+`Shaders/brdf.slang` implements `EvaluateBrdf`: Cook-Torrance specular using GGX/Trowbridge-Reitz
+normal distribution, height-correlated Smith visibility, and Schlick Fresnel, combined with a
+Fresnel-weighted Lambert diffuse term. Dielectrics use F0=0.04; metals use base color as F0 and have
+no diffuse lobe. Perceptual roughness is squared to obtain microfacet alpha. Roughness is floored
+at 0.045 during shading to keep zero-roughness materials numerically stable.
+
+`MaterialData::metallic` and `roughness` accept finite values from zero to one; engine defaults are
+metallic=0 and roughness=0.5. glTF imports preserve the material's scalar factors. The CPU/shader
+material layout is 48 bytes: base color at 0, texture index at 16, alpha cutoff at 20, unlit at 24,
+metallic at 28, roughness at 32, and padding at 36/40/44. `FrameUniform` is now 112 bytes with camera
+position at offset 96. World position is interpolated from the vertex shader so specular highlights
+respond to camera movement. Descriptor bindings and the 80-byte draw push constants are unchanged.
+
+The fragment stage evaluates BRDF * directional radiance * max(N dot L, 0). Lighting and base colors
+are linear; sRGB textures decode on sampling and the sRGB swapchain handles output encoding.
+Unlit materials bypass BRDF evaluation and alpha masks remain supported. The demo compares a
+smooth dielectric checker cube with a blue metallic cube. A 10 by 10 unit gray floor at Y = -1
+uses a nonmetallic material with roughness 0.8 beneath the cubes. The floor uses the existing
+depth testing and PBR lighting, including directional PCF shadows. Collision is not implemented. Imported models
+retain their own scene geometry.
+
+Ambient light is currently an adjustable diffuse approximation and contributes no metallic diffuse.
+Image-based environment/specular lighting, metallic/roughness maps, normal maps, HDR rendering,
+tone mapping, and shadows are not included in this change. Bright specular peaks clamp in the
+existing swapchain output. This is a single-scattering BRDF, without multiscattering compensation.
+
+`PbrTests` checks closed-form normal-incidence dielectric and metal values, tinted metallic specular,
+dielectric neutral specular, roughness changes, view-dependent highlights, back-facing directions,
+zero-roughness stability, all three frame slots, unlit preservation, and invalid material values.
+`LightingTextureTests` retains texture/mip/color-space tests and checks the new BRDF light response.
+See `Docs/PBR.md` for implementation references and the complete file list.
+
+### Directional shadows
+
+The directional light now casts shadows using a scene-fitted orthographic depth pass and a 3x3 PCF kernel.
+Each frame owns a 2048x2048 VMA shadow image; dynamic rendering and Synchronization2 handle writing and sampling.
+Alpha cutout materials preserve their silhouettes in the shadow pass, including off-camera shadow casters.
+Only direct PBR illumination receives shadows; ambient illumination and unlit materials retain their behavior.
+GPU timing includes both the shadow and main passes. Large scenes share one shadow map, so shadow detail
+falls as scene bounds grow. Cascades, variable penumbra softness, and point-light shadows are future extensions.
+See [shadow implementation and file inventory](Docs/SHADOWS.md) for settings, validation, and affected files.

@@ -65,6 +65,8 @@ void FrameRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t 
 	begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 	CheckVulkan(vkBeginCommandBuffer(commandBuffer, &begin), "failed to begin frame command");
+	_frames.GetFrame(_currentFrame).GetTiming().Begin(commandBuffer);
+	_drawCommands.RecordBeforeRendering(commandBuffer, _currentFrame);
 	TransitionImage(commandBuffer, imageIndex, true);
 	const auto &DEPTH = _frames.GetFrame(_currentFrame).GetDepthTarget();
 	const bool HAS_DEPTH = DEPTH.GetFormat() != VK_FORMAT_UNDEFINED;
@@ -86,7 +88,6 @@ void FrameRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t 
 	rendering.colorAttachmentCount = 1;
 	rendering.pColorAttachments = &attachment;
 	rendering.pDepthAttachment = HAS_DEPTH ? &DEPTH_ATTACHMENT : nullptr;
-	_frames.GetFrame(_currentFrame).GetTiming().Begin(commandBuffer);
 	vkCmdBeginRendering(commandBuffer, &rendering);
 	_drawCommands.Record(commandBuffer, _currentFrame);
 	vkCmdEndRendering(commandBuffer);

@@ -5,7 +5,8 @@
 namespace VulkanRenderer {
 
 FrameResources::FrameResources(const VulkanContext &context, const MemoryAllocator &allocator)
-	: _context(context), _uniformBuffer(allocator), _depthTarget(allocator), _timing(context) {
+	: _context(context), _uniformBuffer(allocator), _depthTarget(allocator), _timing(context),
+	  _shadowTarget(context, allocator) {
 }
 
 FrameResources::~FrameResources() noexcept {
@@ -23,12 +24,15 @@ FrameResources::~FrameResources() noexcept {
 	}
 }
 
-void FrameResources::Initialize(VkExtent2D depthExtent, VkFormat depthFormat, bool profile) {
+void FrameResources::Initialize(VkExtent2D depthExtent, VkFormat depthFormat, bool profile, bool shadows) {
 	if (_commandPool) {
 		throw std::logic_error("frame resources already initialized");
 	}
 	if (depthFormat != VK_FORMAT_UNDEFINED) {
 		_depthTarget.Initialize(depthExtent, depthFormat);
+	}
+	if (shadows) {
+		_shadowTarget.Initialize();
 	}
 	_timing.Initialize(profile);
 	_uniformBuffer.Initialize(sizeof(FrameUniform), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);

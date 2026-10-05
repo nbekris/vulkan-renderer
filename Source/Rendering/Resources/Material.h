@@ -10,11 +10,15 @@ struct alignas(16) MaterialData {
 	uint32_t textureIndex = 0;
 	float alphaCutoff = -1;
 	uint32_t unlit = 0;
-	uint32_t padding = 0;
+	float metallic = 0;
+	float roughness = 0.5f;
+	std::array<uint32_t, 3> padding = {};
 };
 
-static_assert(sizeof(MaterialData) == 32);
+static_assert(sizeof(MaterialData) == 48);
 static_assert(offsetof(MaterialData, textureIndex) == 16);
+static_assert(offsetof(MaterialData, metallic) == 28);
+static_assert(offsetof(MaterialData, roughness) == 32);
 
 /** Owns an immutable material buffer independently of presentation descriptor sets. */
 class Material {

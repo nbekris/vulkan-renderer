@@ -2,6 +2,8 @@
 #include "Rendering/IDrawCommands.h"
 #include "Rendering/Pipeline/GraphicsPipeline.h"
 #include "Math/Math.h"
+#include "Rendering/ShadowPass.h"
+#include <memory>
 
 namespace VulkanRenderer {
 class GlobalDescriptors;
@@ -22,6 +24,8 @@ public:
 	~MeshRenderer() override = default;
 	MeshRenderer(const MeshRenderer &) = delete;
 	MeshRenderer &operator=(const MeshRenderer &) = delete;
+	void EnableShadows(const FrameRing &frames);
+	void RecordBeforeRendering(VkCommandBuffer commandBuffer, uint32_t frameIndex) const override;
 	void Record(VkCommandBuffer commandBuffer, uint32_t frameIndex) const override;
 
 	const RenderStats &GetStats() const noexcept { return _stats; }
@@ -37,6 +41,8 @@ private:
 	void ValidateScene(const Scene &scene) const;
 	const GlobalDescriptors &_descriptors;
 	GraphicsPipeline _pipeline;
+	const VulkanContext &_context;
+	std::unique_ptr<ShadowPass> _shadows;
 	const Scene *_scene = nullptr;
 	glm::mat4 _viewProjection{1};
 	bool _cullingEnabled = false;

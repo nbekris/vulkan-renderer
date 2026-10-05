@@ -11,5 +11,7 @@ public:
 	MeshPrimitives &operator=(const MeshPrimitives &) = delete;
 	static MeshData CreateTriangle();
 	static MeshData CreateCube();
+	/** Creates a unit XZ plane centered at the origin, with upward normals and unit UVs. */
+	static MeshData CreatePlane();
 };
 } // namespace VulkanRenderer

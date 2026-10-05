@@ -19,7 +19,7 @@ public:
 
 	FrameResources &GetFrame(uint32_t index) const;
 	void Initialize(uint32_t frameCount, VkExtent2D depthExtent = {}, VkFormat depthFormat = VK_FORMAT_UNDEFINED,
-					bool profile = false);
+					bool profile = false, bool shadows = false);
 
 	FrameRing(const FrameRing &) = delete;
 	FrameRing &operator=(const FrameRing &) = delete;

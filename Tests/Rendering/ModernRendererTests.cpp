@@ -15,6 +15,8 @@
 #include "Rendering/MeshTests.h"
 #include "Assets/GltfTests.h"
 #include "Rendering/LightingTextureTests.h"
+#include "Rendering/PbrTests.h"
+#include "Rendering/ShadowTests.h"
 #include "Rendering/Core/VulkanCheck.h"
 #include "Rendering/Core/VulkanContext.h"
 #include <memory>
@@ -50,6 +52,8 @@ void RunModernRendererTests(const VulkanContext &context, const MemoryAllocator 
 	RunDepthBufferTests(context, allocator, swapChain);
 	RunMeshTests(context, allocator, swapChain);
 	RunLightingTextureTests(context, allocator, swapChain);
+	RunPbrTests(context, allocator, swapChain);
+	RunShadowTests(context, allocator, swapChain);
 	RunGltfTests(context, allocator, swapChain);
 	FrameRing frames(context, allocator);
 	frames.Initialize(3);
@@ -105,6 +109,9 @@ void RunModernRendererTests(const VulkanContext &context, const MemoryAllocator 
 	frame.Prepare(FrameUniform{});
 	probe.Render(renderer, frame, 0);
 	Require(probe.HasGreenCenter(), "independent object transform did not restore visible geometry");
+	// Isolate camera transforms from the view-dependent specular response.
+	scene.GetLighting().SetIntensity(0);
+	scene.GetLighting().SetAmbient(1);
 	frame.Prepare(
 		scene.GetFrameUniform(static_cast<float>(swapChain.GetExtent().width) / swapChain.GetExtent().height));
 	probe.Render(renderer, frame, 0);

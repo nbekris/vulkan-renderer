@@ -2,7 +2,7 @@
 #include "Math/Math.h"
 
 namespace VulkanRenderer {
-/** Linear RGB ambient and Lambert directional illumination; direction points toward the light. */
+/** Linear RGB ambient approximation and directional radiance; direction points toward the light. */
 class Lighting {
 public:
 	Lighting() = default;
