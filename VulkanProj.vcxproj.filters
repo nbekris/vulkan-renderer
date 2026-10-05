@@ -120,8 +120,8 @@
     <None Include="Docs\PROJECT_ORGANIZATION.md">
       <Filter>Docs</Filter>
     </None>
-    <None Include="CODING_STANDARD.md">
-      <Filter>Documentation</Filter>
+    <None Include="Docs\CODING_STANDARD.md">
+      <Filter>Docs</Filter>
     </None>
     <None Include="README.md">
       <Filter>Documentation</Filter>

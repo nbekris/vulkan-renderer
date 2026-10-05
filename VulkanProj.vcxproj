@@ -355,7 +355,7 @@ if errorlevel 1 exit /b 1
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="CODING_STANDARD.md" />
+    <None Include="Docs\CODING_STANDARD.md" />
     <None Include="Docs\PROJECT_ORGANIZATION.md" />
     <None Include="Shaders\vert.spv" />
     <None Include="Shaders\frag.spv" />

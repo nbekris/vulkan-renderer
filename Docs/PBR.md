@@ -4,7 +4,7 @@ The directional-light shader uses `EvaluateBrdf` in Shaders/brdf.slang: GGX norm
 height-correlated Smith visibility, Schlick Fresnel, and energy-partitioned diffuse/specular lobes.
 The metallic/roughness factors, camera position, and world-space vertex position are carried through
 matching CPU/Slang layouts. Static glTF imports read scalar factors. Unlit and alpha-mask behavior
-is retained. README.md documents the equations' usage, controls, layouts, tests, and remaining scope.
+is retained. README.md summarizes usage, controls, verification, and remaining scope.
 
 The formulation follows the standard microfacet model described in Google's
 [Filament rendering documentation](https://google.github.io/filament/main/filament.html).
